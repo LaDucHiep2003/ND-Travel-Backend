@@ -29,8 +29,8 @@ public class TourCategoryEntity {
     @Column(name = "deleted")
     private boolean deleted;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    List<TourCategoryMapping> tour_category_mappings = new ArrayList<>();
+    @ManyToMany(mappedBy = "tourCategories")
+    private List<TourEntity> tours = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -72,19 +72,19 @@ public class TourCategoryEntity {
         this.image = image;
     }
 
-    public List<TourCategoryMapping> getTour_category_mappings() {
-        return tour_category_mappings;
-    }
-
-    public void setTour_category_mappings(List<TourCategoryMapping> tour_category_mappings) {
-        this.tour_category_mappings = tour_category_mappings;
-    }
-
     public boolean isDeleted() {
         return deleted;
     }
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public List<TourEntity> getTours() {
+        return tours;
+    }
+
+    public void setTours(List<TourEntity> tours) {
+        this.tours = tours;
     }
 }

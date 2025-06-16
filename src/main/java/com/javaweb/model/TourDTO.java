@@ -1,6 +1,7 @@
 package com.javaweb.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class TourDTO {
     private Long id;
@@ -20,6 +21,8 @@ public class TourDTO {
     private Integer price_infant;
     private String status;
     private LocalDate departure_date;
+    private List<Long> category_id;
+    private Boolean deleted = false;
 
     public Long getId() {
         return id;
@@ -155,5 +158,21 @@ public class TourDTO {
 
     public void setDeparture_date(LocalDate departure_date) {
         this.departure_date = departure_date;
+    }
+
+    public List<Long> getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(List<Long> category_id) {
+        this.category_id = category_id;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

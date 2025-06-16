@@ -59,12 +59,22 @@ public class TourRepositoryImpl implements TourRepositoryCustom {
     @Override
     public List<TourEntity> findAll(TourSearchBuilder tourSearchBuilder) {
         StringBuilder sql = new StringBuilder("Select t.* from tours t ");
-        StringBuilder where = new StringBuilder("Where 1 = 1");
+        StringBuilder where = new StringBuilder("Where deleted = false ");
         queryNormal(tourSearchBuilder, where);
         querySpecial(tourSearchBuilder, where);
         sql.append(where);
         Query query = entityManager.createNativeQuery(sql.toString(), TourEntity.class);
         return query.getResultList();
+    }
+
+    @Override
+    public void deleteTour(List<Long> ids) {
+        for(Long id : ids){
+            TourEntity existingEntity = entityManager.find(TourEntity.class, id);
+            if(existingEntity != null){
+                existingEntity.setDeleted(true);
+            }
+        }
     }
 
 }

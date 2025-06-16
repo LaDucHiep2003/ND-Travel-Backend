@@ -3,7 +3,6 @@ package com.javaweb.repository.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +62,16 @@ public class TourEntity {
     @Column(name = "departure_date")
     private LocalDate departure_date;
 
-    @OneToMany(mappedBy = "tour", fetch = FetchType.LAZY)
-    List<TourCategoryMapping> tour_category_mappings = new ArrayList<>();
+    @Column(name = "deleted")
+    private Boolean deleted;
+
+    @ManyToMany
+    @JoinTable(
+            name = "tour_category_mapping",
+            joinColumns = @JoinColumn(name = "tour_id"),             // Đảo lại tour_id là chủ
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<TourCategoryEntity> tourCategories = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -202,11 +209,19 @@ public class TourEntity {
         this.departure_date = departure_date;
     }
 
-    public List<TourCategoryMapping> getTour_category_mappings() {
-        return tour_category_mappings;
+    public List<TourCategoryEntity> getTourCategories() {
+        return tourCategories;
     }
 
-    public void setTour_category_mappings(List<TourCategoryMapping> tour_category_mappings) {
-        this.tour_category_mappings = tour_category_mappings;
+    public void setTourCategories(List<TourCategoryEntity> tourCategories) {
+        this.tourCategories = tourCategories;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

@@ -13,5 +13,5 @@ public interface TourService {
     TourDTO findById(Long id);
     TourResponse createTour(TourDTO tourDTO);
     TourResponse editTour(TourDTO tourDTO);
-    TourResponse deleteTour(List<Long> id);
+    TourResponse deleteTour(List<Long> ids);
 }
