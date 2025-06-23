@@ -49,9 +49,9 @@ public class RoleRepositoryImpl implements RoleRepositoryCustom {
     @Override
     public void deleteRole(List<Long> ids) {
         for(Long id : ids){
-            RoleEntity role = entityManager.find(RoleEntity.class, id);
-            if(role != null){
-                role.setDeleted(true);
+            RoleEntity existingEntity = entityManager.find(RoleEntity.class, id);
+            if(existingEntity != null){
+                existingEntity.setDeleted(true);
             }
         }
     }

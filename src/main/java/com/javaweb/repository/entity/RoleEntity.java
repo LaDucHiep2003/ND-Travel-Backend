@@ -22,6 +22,9 @@ public class RoleEntity {
     @Column(name = "deleted")
     private Boolean deleted;
 
+    @Column(name = "description", nullable = false)
+    private String description;
+
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private List<UserEntity> users = new ArrayList<>();
 
@@ -63,5 +66,13 @@ public class RoleEntity {
 
     public void setUsers(List<UserEntity> users) {
         this.users = users;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

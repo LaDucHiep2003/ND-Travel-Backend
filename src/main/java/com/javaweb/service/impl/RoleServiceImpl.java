@@ -12,6 +12,7 @@ import com.javaweb.service.RoleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,7 @@ public class RoleServiceImpl implements RoleService {
         return new TourResponse("success", "Chỉnh sửa quyền thành công");
     }
 
+    @Transactional
     @Override
     public TourResponse deleteRole(List<Long> ids) {
         roleRepository.deleteRole(ids);

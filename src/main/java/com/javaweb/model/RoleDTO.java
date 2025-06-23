@@ -4,6 +4,8 @@ public class RoleDTO {
     private Long id;
     private String name;
     private String code;
+    private String description;
+    private Boolean deleted = false;
 
     public Long getId() {
         return id;
@@ -27,5 +29,21 @@ public class RoleDTO {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }
