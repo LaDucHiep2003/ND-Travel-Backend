@@ -1,38 +1,15 @@
-package com.javaweb.repository.entity;
-
-
-import jakarta.persistence.*;
+package com.javaweb.model;
 
 import java.util.List;
 
-@Entity
-@Table(name="user")
-public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDTO {
     private Long id;
-
-    @Column(name = "username")
     private String username;
-
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "email")
     private String email;
-
-    @Column(name = "fullname")
     private String fullname;
-
-    @Column(name = "deleted")
+    private String password;
     private Boolean deleted;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="user_role",
-            joinColumns = @JoinColumn(name = "userid", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "roleid", nullable = false)
-    )
-    private List<RoleEntity> roles;
+    private List<RoleDTO> roles;
 
     public Long getId() {
         return id;
@@ -50,14 +27,6 @@ public class UserEntity {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -65,6 +34,7 @@ public class UserEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
 
     public Boolean getDeleted() {
         return deleted;
@@ -74,12 +44,20 @@ public class UserEntity {
         this.deleted = deleted;
     }
 
-    public List<RoleEntity> getRoles() {
+    public List<RoleDTO> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<RoleEntity> roles) {
+    public void setRoles(List<RoleDTO> roles) {
         this.roles = roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFullname() {
@@ -89,4 +67,4 @@ public class UserEntity {
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
-}
+} 

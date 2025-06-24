@@ -1,6 +1,5 @@
 package com.javaweb.repository;
 
-import com.javaweb.model.TourDTO;
 import com.javaweb.repository.custom.TourRepositoryCustom;
 import com.javaweb.repository.entity.TourEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -4,7 +4,6 @@ import com.javaweb.builder.RoleSearchBuilder;
 import com.javaweb.converter.RoleDTOConverter;
 import com.javaweb.converter.RoleSearchBuilderConverter;
 import com.javaweb.model.RoleDTO;
-import com.javaweb.model.TourDTO;
 import com.javaweb.model.TourResponse;
 import com.javaweb.repository.RoleRepository;
 import com.javaweb.repository.entity.RoleEntity;
