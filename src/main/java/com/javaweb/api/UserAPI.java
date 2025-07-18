@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -16,8 +17,8 @@ public class UserAPI {
     private UserService userService;
 
     @GetMapping("/api/users")
-    public List<UserDTO> findAll() {
-        return userService.findAll();
+    public List<UserDTO> findAll(@RequestParam Map<String, Object> params) {
+        return userService.findAll(params);
     }
 
     @GetMapping("/api/users/{id}")
@@ -26,13 +27,15 @@ public class UserAPI {
     }
 
     @PostMapping("/api/users")
-    public UserDTO createUser(@RequestBody UserDTO userDTO) {
-        return userService.createUser(userDTO);
+    public ResponseEntity<TourResponse> createUser(@RequestBody UserDTO userDTO) {
+        TourResponse msg = userService.createUser(userDTO);
+        return ResponseEntity.ok(msg);
     }
 
     @PatchMapping("/api/users")
-    public UserDTO updateUser(@RequestBody UserDTO userDTO) {
-        return userService.updateUser(userDTO);
+    public ResponseEntity<TourResponse> updateUser(@RequestBody UserDTO userDTO) {
+        TourResponse msg = userService.updateUser(userDTO);
+        return ResponseEntity.ok(msg);
     }
     @DeleteMapping("/api/users")
     public ResponseEntity<TourResponse> deleteUser(@RequestParam List<Long> ids) {

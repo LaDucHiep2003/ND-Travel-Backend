@@ -8,7 +8,7 @@ public class UserDTO {
     private String email;
     private String fullname;
     private String password;
-    private Boolean deleted;
+    private Boolean deleted = false;
     private List<RoleDTO> roles;
 
     public Long getId() {
