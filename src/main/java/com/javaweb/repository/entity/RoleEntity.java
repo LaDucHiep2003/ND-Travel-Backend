@@ -28,6 +28,14 @@ public class RoleEntity {
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private List<UserEntity> users = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "role_permission",
+        joinColumns = @JoinColumn(name = "role_id"),
+        inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private List<PermissionEntity> permissions = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -42,22 +50,6 @@ public class RoleEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
     }
 
     public List<UserEntity> getUsers() {
@@ -75,4 +67,30 @@ public class RoleEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public List<PermissionEntity> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<PermissionEntity> permissions) {
+        this.permissions = permissions;
+    }
+    
 }

@@ -13,6 +13,7 @@ import com.javaweb.repository.RoleRepository;
 import com.javaweb.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDTOConverter userDTOConverter;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -69,17 +73,19 @@ public class UserServiceImpl implements UserService {
     public TourResponse createUser(UserDTO userDTO) {
         UserEntity userEntity = userDTOConverter.toUserEntity(userDTO);
 
-    // Xử lý roles nếu có
-    if (userDTO.getRoles() != null && !userDTO.getRoles().isEmpty()) {
-        List<Long> roleIds = userDTO.getRoles().stream()
-                .map(roleDTO -> roleDTO.getId())
-                .toList();
-        List<RoleEntity> roles = roleRepository.findAllById(roleIds);
-        userEntity.setRoles(roles);
-    }
+        // Xử lý roles nếu có
+        if (userDTO.getRoles() != null && !userDTO.getRoles().isEmpty()) {
+            List<Long> roleIds = userDTO.getRoles().stream()
+                    .map(roleDTO -> roleDTO.getId())
+                    .toList();
+            List<RoleEntity> roles = roleRepository.findAllById(roleIds);
+            userEntity.setRoles(roles);
+        }
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+        userEntity.setPassword(encodedPassword);
 
-    userRepository.save(userEntity);
-    return new TourResponse("success", "Thêm thành công user");
+        userRepository.save(userEntity);
+        return new TourResponse("success", "Thêm thành công user");
     }
 
     @Override
