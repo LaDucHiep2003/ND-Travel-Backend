@@ -6,6 +6,7 @@ import com.javaweb.model.UserDTO;
 import com.javaweb.converter.UserDTOConverter;
 import com.javaweb.model.RoleDTO;
 import com.javaweb.model.TourResponse;
+import com.javaweb.model.response.ApiResponse;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.repository.entity.UserEntity;
 import com.javaweb.repository.entity.RoleEntity;
@@ -13,6 +14,8 @@ import com.javaweb.repository.RoleRepository;
 import com.javaweb.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,9 +73,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TourResponse createUser(UserDTO userDTO) {
+    public ApiResponse<UserEntity> createUser(UserDTO userDTO) {
+        if (userRepository.existsByUsername(userDTO.getUsername())) {
+            return new ApiResponse<>(409, "Username already exists", null);
+        }
         UserEntity userEntity = userDTOConverter.toUserEntity(userDTO);
-
         // Xử lý roles nếu có
         if (userDTO.getRoles() != null && !userDTO.getRoles().isEmpty()) {
             List<Long> roleIds = userDTO.getRoles().stream()
@@ -85,7 +90,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(encodedPassword);
 
         userRepository.save(userEntity);
-        return new TourResponse("success", "Thêm thành công user");
+        return new ApiResponse<>(201, "User created successfully", userEntity);
     }
 
     @Override

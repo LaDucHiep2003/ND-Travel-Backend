@@ -2,8 +2,11 @@ package com.javaweb.api;
 
 import com.javaweb.model.TourResponse;
 import com.javaweb.model.UserDTO;
+import com.javaweb.model.response.ApiResponse;
+import com.javaweb.repository.entity.UserEntity;
 import com.javaweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +30,16 @@ public class UserAPI {
     }
 
     @PostMapping("/api/users")
-    public ResponseEntity<TourResponse> createUser(@RequestBody UserDTO userDTO) {
-        TourResponse msg = userService.createUser(userDTO);
-        return ResponseEntity.ok(msg);
+    public ResponseEntity<ApiResponse<UserEntity>> createUser(@RequestBody UserDTO userDTO) {
+        ApiResponse<UserEntity> response = userService.createUser(userDTO);
+
+        // Nếu status là 201 (tạo thành công)
+        if (response.getStatus() == 201) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        }
+
+        // Nếu status là 409 (xung đột), hoặc lỗi khác (tùy bạn xử lý)
+        return ResponseEntity.status(HttpStatus.valueOf(response.getStatus())).body(response);
     }
 
     @PatchMapping("/api/users")
