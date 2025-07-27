@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.GrantedAuthority;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -30,17 +31,24 @@ public class AuthServiceImpl implements AuthService {
                     new UsernamePasswordAuthenticationToken(username, password)
             );
 
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtTokenProvider.generateToken((UserDetails) authentication.getPrincipal());
 
-            return new AuthResponse(200, "Login success", token);
+            String role = userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority) // VD: "ROLE_ADMIN"
+                    .map(r -> r.replace("ROLE_", ""))     // Lấy: "ADMIN"
+                    .findFirst().orElse("UNKNOWN");
+
+            return new AuthResponse(200, "Login success", token, role);
 
         } catch (BadCredentialsException e) {
-            return new AuthResponse(401, "Sai tài khoản hoặc mật khẩu", null);
+            return new AuthResponse(401, "Sai tài khoản hoặc mật khẩu", null, null);
         } catch (UsernameNotFoundException e) {
-            return new AuthResponse(401, "Tài khoản không tồn tại", null);
+            return new AuthResponse(401, "Tài khoản không tồn tại", null, null);
         } catch (Exception e) {
-            return new AuthResponse(500, "Đăng nhập thất bại", null);
+            return new AuthResponse(500, "Đăng nhập thất bại", null, null);
         }
     }
 }
