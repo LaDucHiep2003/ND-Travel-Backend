@@ -12,6 +12,7 @@ import java.util.Map;
 public interface UserService {
     List<UserDTO> findAll(Map<String, Object> params);
     UserDTO findById(Long id);
+    UserEntity findByUsername(String username);
     ApiResponse<UserEntity> createUser(UserDTO userDTO);
     TourResponse updateUser(UserDTO userDTO);
     TourResponse deleteUser(List<Long> ids);
