@@ -15,6 +15,7 @@ import com.javaweb.repository.entity.TourEntity;
 import com.javaweb.repository.entity.UserEntity;
 import com.javaweb.service.OrderService;
 import com.javaweb.service.UserService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -51,6 +52,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDTO> result = new ArrayList<>();
         for (OrderEntity orderEntity : orderEntities) {
             OrderDTO orderDTO = orderDTOConverter.toOrderDTO(orderEntity);
+            orderDTO.setCustomer_name(orderEntity.getUser().getFullname());
             result.add(orderDTO);
         }
         return result;
@@ -66,7 +68,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ApiResponse<OrderEntity> edit(OrderDTO dto) {
         OrderEntity orderEntity = orderRepository.findById(dto.getId()).get();
-        orderDTOConverter.toOrderEntity(dto);
+
+        orderEntity.setStatus(dto.getStatus());
+        orderEntity.setPaymentMethod(dto.getPaymentMethod());
+        orderEntity.setNote(dto.getNote());
+
+        BigDecimal totalPrice = BigDecimal.ZERO;
 
         orderEntity.getOrderItems().clear();
         if (dto.getOrderItems() != null && !dto.getOrderItems().isEmpty()) {
@@ -84,8 +91,12 @@ public class OrderServiceImpl implements OrderService {
                 itemEntity.setSubtotal(itemDTO.getUnitPrice().multiply(BigDecimal.valueOf(itemDTO.getQuantity())));
 
                 orderEntity.getOrderItems().add(itemEntity);
+
+                BigDecimal subtotal = itemDTO.getUnitPrice().multiply(BigDecimal.valueOf(itemDTO.getQuantity()));
+                totalPrice = totalPrice.add(subtotal);
             }
         }
+        orderEntity.setTotalPrice(totalPrice);
         orderRepository.save(orderEntity);
 
         return new ApiResponse<>(200, "Edit successfully", null);
@@ -100,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderEntity.setUser(user);
         orderEntity.setTotalPrice(order.getTotalPrice());
-        orderEntity.setStatus("PENDDING");
+        orderEntity.setStatus("PENDING");
         orderEntity.setPaymentMethod(order.getPaymentMethod());
         orderEntity.setNote(order.getNote());
 
@@ -132,8 +143,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<OrderEntity> delete(List<Long> ids) {
         orderRepository.delete(ids);
         return new ApiResponse<>(200, "Delete successfully", null);
+    }
+
+    @Override
+    public ApiResponse<OrderEntity> confirm(List<Long> ids) {
+        orderRepository.confirmOrders(ids);
+        return new ApiResponse<>(200, "Confirm Orders successfully", null);
     }
 }

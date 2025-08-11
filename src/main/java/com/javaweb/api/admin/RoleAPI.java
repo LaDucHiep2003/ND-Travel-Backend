@@ -1,4 +1,4 @@
-package com.javaweb.api;
+package com.javaweb.api.admin;
 
 import com.javaweb.model.PermissionDTO;
 import com.javaweb.model.RoleDTO;

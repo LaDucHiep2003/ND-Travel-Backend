@@ -9,6 +9,7 @@ public class OrderItemDTO {
     private Integer quantity;
     private BigDecimal unitPrice;
     private BigDecimal subtotal;
+    private String thumbnail;
 
     public Long getId() {
         return id;
@@ -56,5 +57,13 @@ public class OrderItemDTO {
 
     public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

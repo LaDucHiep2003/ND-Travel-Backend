@@ -101,3 +101,4 @@ API đặt hàng cho phép người dùng tạo đơn hàng mới với các tou
 3. Đơn hàng mới sẽ có trạng thái "PENDING"
 4. Sử dụng cascade để lưu order items cùng với order
 5. Validation: Kiểm tra user và tour tồn tại trước khi tạo đơn hàng
+

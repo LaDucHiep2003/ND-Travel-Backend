@@ -9,6 +9,7 @@ public class OrderSearchBuilder {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
     private final BigDecimal totalPrice;
+    private final String fullName;
 
     public OrderSearchBuilder(Builder builder) {
         this.id = builder.id;
@@ -16,6 +17,7 @@ public class OrderSearchBuilder {
         this.createdAt = builder.createdAt;
         this.updatedAt = builder.updatedAt;
         this.totalPrice = builder.totalPrice;
+        this.fullName = builder.fullName;
     }
 
     public Long getId() {
@@ -38,12 +40,17 @@ public class OrderSearchBuilder {
         return totalPrice;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
     public static class Builder{
         private Long id;
         private String status;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
         private BigDecimal totalPrice;
+        private String fullName;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -67,6 +74,11 @@ public class OrderSearchBuilder {
 
         public Builder setTotalPrice(BigDecimal totalPrice) {
             this.totalPrice = totalPrice;
+            return this;
+        }
+
+        public Builder setFullName(String fullName) {
+            this.fullName = fullName;
             return this;
         }
 

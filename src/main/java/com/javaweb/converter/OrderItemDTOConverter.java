@@ -16,6 +16,7 @@ public class OrderItemDTOConverter {
         if (orderItemEntity.getTour() != null) {
             orderItemDTO.setTourId(orderItemEntity.getTour().getId());
             orderItemDTO.setTourName(orderItemEntity.getTour().getTitle());
+            orderItemDTO.setThumbnail(orderItemEntity.getTour().getThumbnail());
         }
         return orderItemDTO;
     }

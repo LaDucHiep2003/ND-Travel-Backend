@@ -14,4 +14,5 @@ public interface OrderService {
     ApiResponse<OrderEntity> edit(OrderDTO dto);
     ApiResponse<OrderEntity> order(OrderDTO order);
     ApiResponse<OrderEntity> delete(List<Long> ids);
+    ApiResponse<OrderEntity> confirm(List<Long> ids);
 }

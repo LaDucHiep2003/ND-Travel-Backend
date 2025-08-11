@@ -1,4 +1,4 @@
-package com.javaweb.api;
+package com.javaweb.api.admin;
 
 
 import com.javaweb.model.OrderDTO;
@@ -20,7 +20,7 @@ public class OrderAPI {
     private OrderService orderService;
 
     @GetMapping("orders")
-    public List<OrderDTO> findALl(Map<String, Object> params){
+    public List<OrderDTO> findALl(@RequestParam Map<String, Object> params){
         List<OrderDTO> result = orderService.findAll(params);
         return result;
     }
@@ -43,8 +43,14 @@ public class OrderAPI {
     }
 
     @DeleteMapping("orders")
-    public ResponseEntity<ApiResponse<OrderEntity>> delete(List<Long> ids){
+    public ResponseEntity<ApiResponse<OrderEntity>> delete(@RequestParam List<Long> ids){
         ApiResponse<OrderEntity> result = orderService.delete(ids);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("orders/confirm")
+    public ResponseEntity<ApiResponse<OrderEntity>> confirm(@RequestBody List<Long> ids){
+        ApiResponse<OrderEntity> result = orderService.confirm(ids);
         return ResponseEntity.ok(result);
     }
 }

@@ -15,6 +15,7 @@ public class OrderSearchBuilderConverter {
                 .setId(MapUtil.getObject(params, "id", Long.class))
                 .setStatus(MapUtil.getObject(params, "status", String.class))
                 .setTotalPrice(MapUtil.getObject(params, "totalPrice", BigDecimal.class))
+                .setFullName(MapUtil.getObject(params, "fullName", String.class))
                 .build();
         return toOrderSearchBuilder;
     }

@@ -40,9 +40,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login").permitAll()
-                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "STAFF")
-                        .anyRequest().denyAll()
+                        .requestMatchers("/api/**").permitAll()
+//                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "STAFF")
+//                        .anyRequest().denyAll()
                 )
                 .cors(Customizer.withDefaults())
                 .exceptionHandling(ex -> ex

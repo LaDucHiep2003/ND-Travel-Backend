@@ -1,4 +1,4 @@
-package com.javaweb.api;
+package com.javaweb.api.admin;
 
 import com.javaweb.model.TourDTO;
 import com.javaweb.model.TourResponse;

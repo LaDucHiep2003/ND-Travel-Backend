@@ -8,4 +8,5 @@ import java.util.List;
 public interface OrderRepositoryCustom {
     List<OrderEntity> findALl(OrderSearchBuilder orderSearchBuilder);
     void delete(List<Long> ids);
+    void confirmOrders(List<Long> ids);
 }
