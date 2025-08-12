@@ -21,6 +21,7 @@ public class TourDTO {
     private Integer price_infant;
     private String status;
     private LocalDate departure_date;
+    private LocalDate end_date;
     private List<Long> category_id;
     private Boolean deleted = false;
 
@@ -158,6 +159,14 @@ public class TourDTO {
 
     public void setDeparture_date(LocalDate departure_date) {
         this.departure_date = departure_date;
+    }
+
+    public LocalDate getEnd_date() {
+        return end_date;
+    }
+
+    public void setEnd_date(LocalDate end_date) {
+        this.end_date = end_date;
     }
 
     public List<Long> getCategory_id() {

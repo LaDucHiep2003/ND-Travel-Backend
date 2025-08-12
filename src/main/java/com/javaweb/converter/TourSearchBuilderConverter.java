@@ -18,6 +18,7 @@ public class TourSearchBuilderConverter {
                 .setTitle(MapUtil.getObject(params, "title", String.class))
                 .setTransport(MapUtil.getObject(params, "transport", String.class))
                 .setDeparture_date(MapUtil.getObject(params, "departure_date", LocalDate.class))
+                .setEnd_date(MapUtil.getObject(params, "end_date", LocalDate.class))
                 .setStatus(MapUtil.getObject(params, "status", String.class))
                 .build();
         return tourSearchBuilder;

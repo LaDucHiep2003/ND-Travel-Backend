@@ -21,7 +21,7 @@ public class TourRepositoryImpl implements TourRepositoryCustom {
             for(Field item : fields) {
                 item.setAccessible(true);
                 String fieldName = item.getName();
-                if(!fieldName.equals("departure_date") && !fieldName.equals("price_adult") && !fieldName.equals("status")){
+                if(!fieldName.equals("departure_date") && !fieldName.equals("end_date") && !fieldName.equals("price_adult") && !fieldName.equals("status")){
                     Object value = item.get(tourSearchBuilder);
                     if(value != null){
                         if(item.getType().getName().equals("java.lang.Long") || item.getType().getName().equals("java.lang.Integer")){

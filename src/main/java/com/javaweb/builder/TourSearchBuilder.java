@@ -14,6 +14,8 @@ public class TourSearchBuilder {
     private final Integer price_adultFrom;
     private final Integer price_adultTo;
     private final String status;
+    private final LocalDate end_date;
+
 
     private TourSearchBuilder(Builder builder) {
         this.title = builder.title;
@@ -27,6 +29,7 @@ public class TourSearchBuilder {
         this.price_adultFrom = builder.price_adultFrom;
         this.price_adultTo = builder.price_adultTo;
         this.status = builder.status;
+        this.end_date = builder.end_date;
     }
 
     public Long getId() {
@@ -61,6 +64,10 @@ public class TourSearchBuilder {
         return departure_date;
     }
 
+    public LocalDate getEnd_date() {
+        return end_date;
+    }
+
     public Integer getPrice_adultFrom() {
         return price_adultFrom;
     }
@@ -85,6 +92,7 @@ public class TourSearchBuilder {
         private  Integer price_adultFrom;
         private  Integer price_adultTo;
         private String status;
+        private LocalDate end_date;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -138,6 +146,11 @@ public class TourSearchBuilder {
 
         public Builder setStatus(String status) {
             this.status = status;
+            return this;
+        }
+
+        public Builder setEnd_date(LocalDate end_date) {
+            this.end_date = end_date;
             return this;
         }
 

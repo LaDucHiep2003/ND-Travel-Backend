@@ -62,6 +62,9 @@ public class TourEntity {
     @Column(name = "departure_date")
     private LocalDate departure_date;
 
+    @Column(name = "end_date")
+    private LocalDate end_date;
+
     @Column(name = "deleted")
     private Boolean deleted;
 
@@ -207,6 +210,14 @@ public class TourEntity {
 
     public void setDeparture_date(LocalDate departure_date) {
         this.departure_date = departure_date;
+    }
+
+    public LocalDate getEnd_date() {
+        return end_date;
+    }
+
+    public void setEnd_date(LocalDate end_date) {
+        this.end_date = end_date;
     }
 
     public List<TourCategoryEntity> getTourCategories() {

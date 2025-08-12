@@ -88,7 +88,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         for(Long id : ids){
             OrderEntity existingEntity = entityManager.find(OrderEntity.class, id);
             if(existingEntity != null){
-                existingEntity.setStatus("confirmed");
+                existingEntity.setStatus("CONFIRMED");
             }
         }
     }

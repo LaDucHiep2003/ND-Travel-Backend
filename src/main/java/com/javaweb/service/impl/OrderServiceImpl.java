@@ -150,6 +150,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<OrderEntity> confirm(List<Long> ids) {
         orderRepository.confirmOrders(ids);
         return new ApiResponse<>(200, "Confirm Orders successfully", null);
