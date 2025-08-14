@@ -15,13 +15,21 @@ public class TourRepositoryImpl implements TourRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
 
+    public static  void joinTable(TourSearchBuilder tourSearchBuilder, StringBuilder sql) {
+        Integer categoryId = tourSearchBuilder.getCategory();
+        if(categoryId != null) {
+            sql.append(" inner join tour_category_mapping on t.id = tour_category_mapping.tour_id ");
+        }
+    }
+
     public static void queryNormal(TourSearchBuilder tourSearchBuilder, StringBuilder where) {
         try{
             Field[] fields = TourSearchBuilder.class.getDeclaredFields();
             for(Field item : fields) {
                 item.setAccessible(true);
                 String fieldName = item.getName();
-                if(!fieldName.equals("departure_date") && !fieldName.equals("end_date") && !fieldName.equals("price_adult") && !fieldName.equals("status")){
+                if(!fieldName.equals("departure_date") && !fieldName.equals("end_date") && !fieldName.equals("price_adultFrom")
+                        && !fieldName.equals("status") && !fieldName.equals("price_adultTo") && !fieldName.equals("discount") && !fieldName.equals("category")){
                     Object value = item.get(tourSearchBuilder);
                     if(value != null){
                         if(item.getType().getName().equals("java.lang.Long") || item.getType().getName().equals("java.lang.Integer")){
@@ -42,10 +50,10 @@ public class TourRepositoryImpl implements TourRepositoryCustom {
         Integer price_adultFrom = tourSearchBuilder.getPrice_adultFrom();
         if(price_adultFrom != null || price_adultTo != null){
             if(price_adultTo != null){
-                where.append(" And t.price_adult >= '" + price_adultTo + "'");
+                where.append(" And t.price_adult <= '" + price_adultTo + "'");
             }
             if(price_adultFrom != null){
-                where.append(" And t.price_adult <= '" + price_adultFrom + "'");
+                where.append(" And t.price_adult >= '" + price_adultFrom + "'");
             }
         }
         String status = tourSearchBuilder.getStatus();
@@ -54,11 +62,28 @@ public class TourRepositoryImpl implements TourRepositoryCustom {
         }else{
             where.append(" And 1 = 1");
         }
+        
+        Double discountFrom = tourSearchBuilder.getDiscountFrom();
+        Double discountTo = tourSearchBuilder.getDiscountTo();
+        if(discountFrom != null || discountTo != null){
+            if(discountFrom != null){
+                where.append(" And t.discount >= '" + discountFrom + "'");
+            }
+            if(discountTo != null){
+                where.append(" And t.discount <= '" + discountTo + "'");
+            }
+        }
+
+        Integer categoryId = tourSearchBuilder.getCategory();
+        if(categoryId != null){
+            where.append(" And tour_category_mapping.category_id = '" + categoryId + "'");
+        }
     }
 
     @Override
     public List<TourEntity> findAll(TourSearchBuilder tourSearchBuilder) {
         StringBuilder sql = new StringBuilder("Select t.* from tours t ");
+        joinTable(tourSearchBuilder, sql);
         StringBuilder where = new StringBuilder("Where deleted = false ");
         queryNormal(tourSearchBuilder, where);
         querySpecial(tourSearchBuilder, where);

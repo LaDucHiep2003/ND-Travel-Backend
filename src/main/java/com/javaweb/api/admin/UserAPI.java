@@ -1,4 +1,4 @@
-package com.javaweb.api;
+package com.javaweb.api.admin;
 
 import com.javaweb.model.TourResponse;
 import com.javaweb.model.UserDTO;
@@ -15,21 +15,22 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
+@RequestMapping("/api/admin")
 public class UserAPI {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/api/users")
+    @GetMapping("/users")
     public List<UserDTO> findAll(@RequestParam Map<String, Object> params) {
         return userService.findAll(params);
     }
 
-    @GetMapping("/api/users/{id}")
+    @GetMapping("/users/{id}")
     public UserDTO findById(@PathVariable Long id) {
         return userService.findById(id);
     }
 
-    @PostMapping("/api/users")
+    @PostMapping("/users")
     public ResponseEntity<ApiResponse<UserEntity>> createUser(@RequestBody UserDTO userDTO) {
         ApiResponse<UserEntity> response = userService.createUser(userDTO);
 
@@ -42,12 +43,12 @@ public class UserAPI {
         return ResponseEntity.status(HttpStatus.valueOf(response.getStatus())).body(response);
     }
 
-    @PatchMapping("/api/users")
+    @PatchMapping("/users")
     public ResponseEntity<TourResponse> updateUser(@RequestBody UserDTO userDTO) {
         TourResponse msg = userService.updateUser(userDTO);
         return ResponseEntity.ok(msg);
     }
-    @DeleteMapping("/api/users")
+    @DeleteMapping("/users")
     public ResponseEntity<TourResponse> deleteUser(@RequestParam List<Long> ids) {
         TourResponse msg = userService.deleteUser(ids);
         return ResponseEntity.ok(msg);

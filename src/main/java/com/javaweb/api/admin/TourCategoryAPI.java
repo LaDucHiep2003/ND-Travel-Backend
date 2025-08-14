@@ -8,33 +8,35 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
+@RequestMapping("/api/admin")
 public class TourCategoryAPI {
     @Autowired
     private TourCategoryService tourCategoryService;
 
-    @GetMapping("/api/category")
-    public List<TourCategoryDTO> findAll(){
-        return tourCategoryService.findAll();
+    @GetMapping("/category")
+    public List<TourCategoryDTO> findAll(@RequestParam Map<String, Object> params){
+        return tourCategoryService.findAll(params);
     }
-    @GetMapping("/api/category/{id}")
+    @GetMapping("/category/{id}")
     public TourCategoryDTO findById(@PathVariable Long id){
         return tourCategoryService.findById(id);
     }
 
-    @PostMapping("/api/category")
+    @PostMapping("/category")
     public ResponseEntity<TourResponse> createCategory(@RequestBody TourCategoryDTO tourCategoryDTO){
         TourResponse result = tourCategoryService.createCategory(tourCategoryDTO);
         return ResponseEntity.ok(result);
     }
-    @PatchMapping("/api/category")
+    @PatchMapping("/category")
     public ResponseEntity<TourResponse> updateCategory(@RequestBody TourCategoryDTO tourCategoryDTO){
         TourResponse result = tourCategoryService.updateCategory(tourCategoryDTO);
         return ResponseEntity.ok(result);
     }
-    @DeleteMapping("/api/category")
+    @DeleteMapping("/category")
     public ResponseEntity<TourResponse> save(@RequestParam List<Long> ids){
         TourResponse result = tourCategoryService.deleteCategory(ids);
         return ResponseEntity.ok(result);

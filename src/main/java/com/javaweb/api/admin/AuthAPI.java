@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api")
+@RequestMapping("/api/admin")
 public class AuthAPI {
     @Autowired
     private AuthService authService;
@@ -29,5 +29,4 @@ public class AuthAPI {
         }
         return ResponseEntity.status(HttpStatus.valueOf(response.getStatus())).body(response);
     }
-
 }

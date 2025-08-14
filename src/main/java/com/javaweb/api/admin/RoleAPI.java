@@ -15,43 +15,44 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
+@RequestMapping("/api/admin")
 public class RoleAPI {
     @Autowired
     private RoleService roleService;
     @Autowired
     private PermissionsService permissionsService;
 
-    @GetMapping("/api/roles")
+    @GetMapping("/roles")
     List<RoleDTO> findAll(@RequestParam Map<String, Object> params){
         List<RoleDTO> result = roleService.findALL(params);
         return result;
     }
 
-    @GetMapping("/api/roles/permissions")
+    @GetMapping("/roles/permissions")
     List<PermissionDTO> findAllPermissions(){
         List<PermissionDTO> result = permissionsService.findAll();
         return result;
     }
 
-    @GetMapping("/api/role/{id}")
+    @GetMapping("/role/{id}")
     RoleDTO findById(@PathVariable Long id){
         RoleDTO result = roleService.findById(id);
         return result;
     }
 
-    @PostMapping("/api/role")
+    @PostMapping("/role")
     ResponseEntity<TourResponse> createRole(@RequestBody RoleDTO roleDTO){
         TourResponse msg = roleService.createRole(roleDTO);
         return ResponseEntity.ok(msg);
     }
 
-    @PatchMapping("/api/role")
+    @PatchMapping("/role")
     ResponseEntity<TourResponse> updateRole(@RequestBody RoleDTO roleDTO){
         TourResponse msg = roleService.updateRole(roleDTO);
         return ResponseEntity.ok(msg);
     }
 
-    @DeleteMapping("/api/roles")
+    @DeleteMapping("/roles")
     ResponseEntity<TourResponse> deleteRole(@RequestParam List<Long> ids){
         TourResponse msg = roleService.deleteRole(ids);
         return ResponseEntity.ok(msg);

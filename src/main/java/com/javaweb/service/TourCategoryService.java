@@ -4,9 +4,10 @@ import com.javaweb.model.TourCategoryDTO;
 import com.javaweb.model.TourResponse;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TourCategoryService {
-    List<TourCategoryDTO> findAll();
+    List<TourCategoryDTO> findAll(Map<String, Object> params);
     TourCategoryDTO findById(Long id);
     TourResponse createCategory(TourCategoryDTO tourCategoryDTO);
     TourResponse updateCategory(TourCategoryDTO tourCategoryDTO);

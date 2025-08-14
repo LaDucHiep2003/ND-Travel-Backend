@@ -1,4 +1,4 @@
-package com.javaweb.api;
+package com.javaweb.api.admin;
 
 import com.javaweb.model.TourItineraryDTO;
 import com.javaweb.service.TourItineraryService;
@@ -11,17 +11,18 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
+@RequestMapping("/api/admin")
 public class ScheduleAPI {
 
     @Autowired
     private TourItineraryService tourItineraryService;
 
-    @GetMapping("/api/schedule")
+    @GetMapping("/schedule")
     public List<TourItineraryDTO> getScheduleByTour(@RequestParam(name = "tour") Long tourId) {
         return tourItineraryService.getItinerariesByTourId(tourId);
     }
 
-    @PatchMapping("/api/schedule/{id}")
+    @PatchMapping("/schedule/{id}")
     public ResponseEntity<TourItineraryDTO> updateItineraryStatus(
             @PathVariable Long id,
             @RequestParam(name = "status") ItineraryStatus status) {

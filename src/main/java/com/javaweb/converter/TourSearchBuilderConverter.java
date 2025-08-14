@@ -17,8 +17,13 @@ public class TourSearchBuilderConverter {
                 .setDuration(MapUtil.getObject(params, "duration", String.class))
                 .setTitle(MapUtil.getObject(params, "title", String.class))
                 .setTransport(MapUtil.getObject(params, "transport", String.class))
+                .setPrice_adultFrom(MapUtil.getObject(params, "price_adultFrom", Integer.class))
+                .setPrice_adultTo(MapUtil.getObject(params, "price_adultTo", Integer.class))
                 .setDeparture_date(MapUtil.getObject(params, "departure_date", LocalDate.class))
                 .setEnd_date(MapUtil.getObject(params, "end_date", LocalDate.class))
+                .setDiscountFrom(MapUtil.getObject(params, "discountFrom", Double.class))
+                .setDiscountTo(MapUtil.getObject(params, "discountTo", Double.class))
+                .setCategory(MapUtil.getObject(params, "category", Integer.class))
                 .setStatus(MapUtil.getObject(params, "status", String.class))
                 .build();
         return tourSearchBuilder;

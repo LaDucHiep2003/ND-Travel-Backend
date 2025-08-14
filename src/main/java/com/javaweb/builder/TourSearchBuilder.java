@@ -15,6 +15,9 @@ public class TourSearchBuilder {
     private final Integer price_adultTo;
     private final String status;
     private final LocalDate end_date;
+    private final Double discountFrom;
+    private final Double discountTo;
+    private final Integer category;
 
 
     private TourSearchBuilder(Builder builder) {
@@ -30,6 +33,9 @@ public class TourSearchBuilder {
         this.price_adultTo = builder.price_adultTo;
         this.status = builder.status;
         this.end_date = builder.end_date;
+        this.discountFrom = builder.discountFrom;
+        this.discountTo = builder.discountTo;
+        this.category = builder.category;
     }
 
     public Long getId() {
@@ -80,6 +86,18 @@ public class TourSearchBuilder {
         return status;
     }
 
+    public Double getDiscountFrom() {
+        return discountFrom;
+    }
+
+    public Double getDiscountTo() {
+        return discountTo;
+    }
+
+    public Integer getCategory() {
+        return category;
+    }
+
     public static class Builder {
         private Long id;
         private String title;
@@ -93,6 +111,9 @@ public class TourSearchBuilder {
         private  Integer price_adultTo;
         private String status;
         private LocalDate end_date;
+        private Double discountFrom;
+        private Double discountTo;
+        private Integer category;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -151,6 +172,21 @@ public class TourSearchBuilder {
 
         public Builder setEnd_date(LocalDate end_date) {
             this.end_date = end_date;
+            return this;
+        }
+
+        public Builder setDiscountFrom(Double discountFrom) {
+            this.discountFrom = discountFrom;
+            return this;
+        }
+
+        public Builder setDiscountTo(Double discountTo) {
+            this.discountTo = discountTo;
+            return this;
+        }
+
+        public Builder setCategory(Integer category) {
+            this.category = category;
             return this;
         }
 

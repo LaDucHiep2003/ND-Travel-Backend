@@ -1,6 +1,8 @@
 package com.javaweb.service.impl;
 
+import com.javaweb.builder.TourCategorySearchBuilder;
 import com.javaweb.converter.TourCategoryDTOConverter;
+import com.javaweb.converter.TourCategorySearchBuilderConverter;
 import com.javaweb.model.TourCategoryDTO;
 import com.javaweb.model.TourResponse;
 import com.javaweb.repository.TourCategoryRepository;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TourCategoryServiceImpl implements TourCategoryService {
@@ -23,11 +26,15 @@ public class TourCategoryServiceImpl implements TourCategoryService {
     private TourCategoryDTOConverter tourCategoryDTOConverter;
 
     @Autowired
+    private TourCategorySearchBuilderConverter tourCategorySearchBuilderConverter;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Override
-    public List<TourCategoryDTO> findAll() {
-        List<TourCategoryEntity> tourCategoryEntities = tourCategoryRepository.findByDeletedFalse();
+    public List<TourCategoryDTO> findAll(Map<String, Object> params) {
+        TourCategorySearchBuilder tourCategorySearchBuilder = tourCategorySearchBuilderConverter.tourCategorySearchBuilder(params);
+        List<TourCategoryEntity> tourCategoryEntities = tourCategoryRepository.findAll(tourCategorySearchBuilder);
         List<TourCategoryDTO> result = new ArrayList<>();
         for (TourCategoryEntity tourCategoryEntity : tourCategoryEntities) {
             TourCategoryDTO tourCategoryDTO = tourCategoryDTOConverter.tourCategoryDTO(tourCategoryEntity);

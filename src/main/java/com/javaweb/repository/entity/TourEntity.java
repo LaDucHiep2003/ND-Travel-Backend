@@ -65,6 +65,9 @@ public class TourEntity {
     @Column(name = "end_date")
     private LocalDate end_date;
 
+    @Column(name = "discount")
+    private Double discount;
+
     @Column(name = "deleted")
     private Boolean deleted;
 
@@ -218,6 +221,14 @@ public class TourEntity {
 
     public void setEnd_date(LocalDate end_date) {
         this.end_date = end_date;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
     public List<TourCategoryEntity> getTourCategories() {

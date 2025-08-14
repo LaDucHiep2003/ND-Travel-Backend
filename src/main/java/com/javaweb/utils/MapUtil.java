@@ -13,7 +13,11 @@ public class MapUtil {
                     obj = obj != "" ? Integer.valueOf(obj.toString()) : null;
                 } else if (tClass.getTypeName().equals("java.lang.String")) {
                     obj = obj.toString();
-                } else if (tClass.getTypeName().equals("java.util.Date")) {
+                }
+                else if (tClass.getTypeName().equals("java.lang.Double")) {
+                    obj = obj != "" ? Double.valueOf(obj.toString()) : null;
+                }
+                    else if (tClass.getTypeName().equals("java.util.Date")) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // chỉnh định dạng theo frontend gửi
                     obj = sdf.parse(obj.toString());
                 }

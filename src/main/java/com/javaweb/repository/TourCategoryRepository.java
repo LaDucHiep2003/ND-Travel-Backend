@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TourCategoryRepository extends JpaRepository<TourCategoryEntity, Long>, TourCategoryRepositoryCustom {
-    List<TourCategoryEntity> findByDeletedFalse();
 }
