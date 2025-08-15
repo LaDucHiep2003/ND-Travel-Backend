@@ -16,6 +16,7 @@ public class CorsConfig {
                         .allowedOrigins("http://localhost:5173") // Địa chỉ frontend
                         .allowedMethods("*")
                         .allowedHeaders("*")
+                        .exposedHeaders("X-Total-Count")
                         .allowCredentials(true);
             }
         };

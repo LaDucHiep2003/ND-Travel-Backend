@@ -18,9 +18,12 @@ public class TourAPI {
     private TourService tourService;
 
     @GetMapping("/tours")
-    public List<TourDTO> findAll(@RequestParam Map<String, Object> params) {
+    public ResponseEntity<List<TourDTO>> findAll(@RequestParam Map<String, Object> params) {
         List<TourDTO> result = tourService.findAll(params);
-        return result;
+        long total = tourService.count(params);
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(total))
+                .body(result);
     }
 
     @GetMapping("/tours/{id}")

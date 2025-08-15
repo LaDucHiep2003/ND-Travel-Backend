@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface TourRepositoryCustom {
     List<TourEntity> findAll(TourSearchBuilder tourSearchBuilder);
+    long countAll(TourSearchBuilder tourSearchBuilder);
     void deleteTour(List<Long> ids);
 }

@@ -18,6 +18,8 @@ public class TourSearchBuilder {
     private final Double discountFrom;
     private final Double discountTo;
     private final Integer category;
+    private final Integer page;
+    private final Integer size;
 
 
     private TourSearchBuilder(Builder builder) {
@@ -36,6 +38,8 @@ public class TourSearchBuilder {
         this.discountFrom = builder.discountFrom;
         this.discountTo = builder.discountTo;
         this.category = builder.category;
+        this.page = builder.page;
+        this.size = builder.size;
     }
 
     public Long getId() {
@@ -98,6 +102,14 @@ public class TourSearchBuilder {
         return category;
     }
 
+    public Integer getPage() {
+        return page;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
     public static class Builder {
         private Long id;
         private String title;
@@ -114,6 +126,8 @@ public class TourSearchBuilder {
         private Double discountFrom;
         private Double discountTo;
         private Integer category;
+        private Integer page;
+        private Integer size;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -187,6 +201,16 @@ public class TourSearchBuilder {
 
         public Builder setCategory(Integer category) {
             this.category = category;
+            return this;
+        }
+
+        public Builder setPage(Integer page) {
+            this.page = page;
+            return this;
+        }
+
+        public Builder setSize(Integer size) {
+            this.size = size;
             return this;
         }
 

@@ -8,6 +8,7 @@ import java.util.Map;
 
 public interface TourService {
     List<TourDTO> findAll(Map<String, Object> params);
+    long count(Map<String, Object> params);
     TourDTO findById(Long id);
     TourResponse createTour(TourDTO tourDTO);
     TourResponse editTour(TourDTO tourDTO);

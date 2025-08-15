@@ -50,6 +50,12 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
+    public long count(Map<String, Object> params) {
+        TourSearchBuilder tourSearchBuilders = tourSearchBuilderConverter.toTourSearchBuilder(params);
+        return tourRepository.countAll(tourSearchBuilders);
+    }
+
+    @Override
     public TourDTO findById(Long id) {
         TourEntity tourEntity = tourRepository.findById(id).get();
         TourDTO tourDTO = tourDTOConverter.toTourDTO(tourEntity);

@@ -89,7 +89,33 @@ public class TourRepositoryImpl implements TourRepositoryCustom {
         querySpecial(tourSearchBuilder, where);
         sql.append(where);
         Query query = entityManager.createNativeQuery(sql.toString(), TourEntity.class);
+
+        // Pagination
+        Integer page = tourSearchBuilder.getPage();
+        Integer size = tourSearchBuilder.getSize();
+        if (page != null && size != null && page >= 0 && size > 0) {
+            int firstResult = page * size;
+            query.setFirstResult(firstResult);
+            query.setMaxResults(size);
+        }
+
         return query.getResultList();
+    }
+
+    @Override
+    public long countAll(TourSearchBuilder tourSearchBuilder) {
+        StringBuilder sql = new StringBuilder("Select COUNT(DISTINCT t.id) from tours t ");
+        joinTable(tourSearchBuilder, sql);
+        StringBuilder where = new StringBuilder("Where deleted = false ");
+        queryNormal(tourSearchBuilder, where);
+        querySpecial(tourSearchBuilder, where);
+        sql.append(where);
+        Query query = entityManager.createNativeQuery(sql.toString());
+        Object singleResult = query.getSingleResult();
+        if (singleResult instanceof Number) {
+            return ((Number) singleResult).longValue();
+        }
+        return Long.parseLong(singleResult.toString());
     }
 
     @Override

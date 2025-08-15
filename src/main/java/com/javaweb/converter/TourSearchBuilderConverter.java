@@ -25,6 +25,8 @@ public class TourSearchBuilderConverter {
                 .setDiscountTo(MapUtil.getObject(params, "discountTo", Double.class))
                 .setCategory(MapUtil.getObject(params, "category", Integer.class))
                 .setStatus(MapUtil.getObject(params, "status", String.class))
+                .setPage(MapUtil.getObject(params, "page", Integer.class))
+                .setSize(MapUtil.getObject(params, "size", Integer.class))
                 .build();
         return tourSearchBuilder;
     }
