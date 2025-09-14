@@ -29,7 +29,8 @@ public class TourRepositoryImpl implements TourRepositoryCustom {
                 item.setAccessible(true);
                 String fieldName = item.getName();
                 if(!fieldName.equals("departure_date") && !fieldName.equals("end_date") && !fieldName.equals("price_adultFrom")
-                        && !fieldName.equals("status") && !fieldName.equals("price_adultTo") && !fieldName.equals("discount") && !fieldName.equals("category")){
+                        && !fieldName.equals("status") && !fieldName.equals("price_adultTo") && !fieldName.equals("discount")
+                        && !fieldName.equals("category") && !fieldName.equals("page") && !fieldName.equals("size")){
                     Object value = item.get(tourSearchBuilder);
                     if(value != null){
                         if(item.getType().getName().equals("java.lang.Long") || item.getType().getName().equals("java.lang.Integer")){
@@ -93,11 +94,15 @@ public class TourRepositoryImpl implements TourRepositoryCustom {
         // Pagination
         Integer page = tourSearchBuilder.getPage();
         Integer size = tourSearchBuilder.getSize();
-        if (page != null && size != null && page >= 0 && size > 0) {
-            int firstResult = page * size;
-            query.setFirstResult(firstResult);
-            query.setMaxResults(size);
+        if (page == null || page <= 0) {
+            page = 1;
         }
+        if (size == null || size <= 0) {
+            size = 10;
+        }
+        int firstResult = (page - 1) * size;;
+        query.setFirstResult(firstResult);
+        query.setMaxResults(size);
 
         return query.getResultList();
     }

@@ -2,6 +2,7 @@ package com.javaweb.api.admin;
 
 import com.javaweb.model.TourDTO;
 import com.javaweb.model.TourResponse;
+import com.javaweb.model.response.PageResponse;
 import com.javaweb.service.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,15 @@ public class TourAPI {
     private TourService tourService;
 
     @GetMapping("/tours")
-    public ResponseEntity<List<TourDTO>> findAll(@RequestParam Map<String, Object> params) {
+    public ResponseEntity<PageResponse<TourDTO>> findAll(@RequestParam Map<String, Object> params) {
+        int page = params.containsKey("page") ? Integer.parseInt((String) params.get("page")) : 1;
+        int size = params.containsKey("size") ? Integer.parseInt((String) params.get("size")) : 10;
         List<TourDTO> result = tourService.findAll(params);
         long total = tourService.count(params);
-        return ResponseEntity.ok()
-                .header("X-Total-Count", String.valueOf(total))
-                .body(result);
+
+        PageResponse<TourDTO> response = new PageResponse<>(result, total, page, size);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/tours/{id}")
