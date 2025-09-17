@@ -1,6 +1,7 @@
 package com.javaweb.converter;
 
 import com.javaweb.model.TourDTO;
+import com.javaweb.model.response.TourResponse;
 import com.javaweb.repository.entity.TourEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ public class TourDTOConverter {
     private ModelMapper modelMapper;
 
 
-    public TourDTO toTourDTO(TourEntity item) {
-        return modelMapper.map(item, TourDTO.class);
+    public TourResponse toTourDTO(TourEntity item) {
+        return modelMapper.map(item, TourResponse.class);
     }
 }

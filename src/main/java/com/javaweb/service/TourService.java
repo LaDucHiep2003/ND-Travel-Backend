@@ -1,16 +1,17 @@
 package com.javaweb.service;
 
 import com.javaweb.model.TourDTO;
-import com.javaweb.model.TourResponse;
+import com.javaweb.model.request.TourRequest;
+import com.javaweb.model.response.TourResponse;
 
 import java.util.List;
 import java.util.Map;
 
 public interface TourService {
-    List<TourDTO> findAll(Map<String, Object> params);
+    List<TourResponse> findAll(Map<String, Object> params);
     long count(Map<String, Object> params);
-    TourDTO findById(Long id);
-    TourResponse createTour(TourDTO tourDTO);
-    TourResponse editTour(TourDTO tourDTO);
-    TourResponse deleteTour(List<Long> ids);
+    TourResponse findById(Long id);
+    TourResponse createTour(TourRequest tourDTO);
+    TourResponse editTour(TourRequest tourDTO);
+    void deleteTour(List<Long> ids);
 }

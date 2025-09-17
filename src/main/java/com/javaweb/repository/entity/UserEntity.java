@@ -3,6 +3,7 @@ package com.javaweb.repository.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,6 +34,9 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "roleid", nullable = false)
     )
     private List<RoleEntity> roles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartEntity> carts = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -88,5 +92,13 @@ public class UserEntity {
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
+    }
+
+    public List<CartEntity> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(List<CartEntity> carts) {
+        this.carts = carts;
     }
 }

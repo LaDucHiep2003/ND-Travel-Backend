@@ -5,7 +5,9 @@ import com.javaweb.converter.OrderDTOConverter;
 import com.javaweb.converter.OrderSearchBuilderConverter;
 import com.javaweb.model.OrderDTO;
 import com.javaweb.model.OrderItemDTO;
-import com.javaweb.model.response.ApiResponse;
+import com.javaweb.model.ApiResponse;
+import com.javaweb.model.request.OrderRequest;
+import com.javaweb.model.response.OrderResponse;
 import com.javaweb.repository.OrderRepository;
 import com.javaweb.repository.TourRepository;
 import com.javaweb.repository.UserRepository;
@@ -14,12 +16,8 @@ import com.javaweb.repository.entity.OrderItemEntity;
 import com.javaweb.repository.entity.TourEntity;
 import com.javaweb.repository.entity.UserEntity;
 import com.javaweb.service.OrderService;
-import com.javaweb.service.UserService;
 import jakarta.transaction.Transactional;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -46,12 +44,12 @@ public class OrderServiceImpl implements OrderService {
     private UserRepository userRepository;
 
     @Override
-    public List<OrderDTO> findAll(Map<String, Object> params) {
+    public List<OrderResponse> findAll(Map<String, Object> params) {
         OrderSearchBuilder orderSearchBuilder = orderSearchBuilderConverter.toOrderSearchBuilder(params);
         List<OrderEntity> orderEntities = orderRepository.findALl(orderSearchBuilder);
-        List<OrderDTO> result = new ArrayList<>();
+        List<OrderResponse> result = new ArrayList<>();
         for (OrderEntity orderEntity : orderEntities) {
-            OrderDTO orderDTO = orderDTOConverter.toOrderDTO(orderEntity);
+            OrderResponse orderDTO = orderDTOConverter.toOrderDTO(orderEntity);
             orderDTO.setCustomer_name(orderEntity.getUser().getFullname());
             result.add(orderDTO);
         }
@@ -59,14 +57,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO findById(Long id) {
+    public OrderResponse findById(Long id) {
         OrderEntity orderEntity = orderRepository.findById(id).get();
-        OrderDTO orderDTO = orderDTOConverter.toOrderDTO(orderEntity);
+        OrderResponse orderDTO = orderDTOConverter.toOrderDTO(orderEntity);
         return orderDTO;
     }
 
     @Override
-    public ApiResponse<OrderEntity> edit(OrderDTO dto) {
+    public OrderResponse edit(OrderRequest dto) {
         OrderEntity orderEntity = orderRepository.findById(dto.getId()).get();
 
         orderEntity.setStatus(dto.getStatus());
@@ -97,13 +95,13 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         orderEntity.setTotalPrice(totalPrice);
-        orderRepository.save(orderEntity);
+        OrderEntity result = orderRepository.save(orderEntity);
 
-        return new ApiResponse<>(200, "Edit successfully", null);
+        return orderDTOConverter.toOrderDTO(result);
     }
 
     @Override
-    public ApiResponse<OrderEntity> order(OrderDTO order) {
+    public OrderResponse order(OrderRequest order) {
         OrderEntity orderEntity = new OrderEntity();
 
         UserEntity user = userRepository.findById(order.getUserId())
@@ -138,21 +136,19 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setOrderItems(orderItems);
         orderEntity.setTotalPrice(totalPrice);
 
-        orderRepository.save(orderEntity);
-        return new ApiResponse<>(201, "Order successfully", null);
+        OrderEntity result = orderRepository.save(orderEntity);
+        return orderDTOConverter.toOrderDTO(result);
     }
 
     @Override
     @Transactional
-    public ApiResponse<OrderEntity> delete(List<Long> ids) {
+    public void delete(List<Long> ids) {
         orderRepository.delete(ids);
-        return new ApiResponse<>(200, "Delete successfully", null);
     }
 
     @Override
     @Transactional
-    public ApiResponse<OrderEntity> confirm(List<Long> ids) {
+    public void confirm(List<Long> ids) {
         orderRepository.confirmOrders(ids);
-        return new ApiResponse<>(200, "Confirm Orders successfully", null);
     }
 }

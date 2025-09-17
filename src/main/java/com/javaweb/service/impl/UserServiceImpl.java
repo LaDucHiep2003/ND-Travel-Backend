@@ -6,7 +6,9 @@ import com.javaweb.model.UserDTO;
 import com.javaweb.converter.UserDTOConverter;
 import com.javaweb.model.RoleDTO;
 import com.javaweb.model.TourResponse;
-import com.javaweb.model.response.ApiResponse;
+import com.javaweb.model.ApiResponse;
+import com.javaweb.model.request.UserRequest;
+import com.javaweb.model.response.UserResponse;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.repository.entity.UserEntity;
 import com.javaweb.repository.entity.RoleEntity;
@@ -14,8 +16,6 @@ import com.javaweb.repository.RoleRepository;
 import com.javaweb.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,54 +65,48 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findById(Long id) {
+    public UserResponse findById(Long id) {
         UserEntity userEntity = userRepository.findById(id).get();
-        if (userEntity == null) return null;
-        UserDTO result = userDTOConverter.toUserDTO(userEntity);
+        UserResponse result = userDTOConverter.toUserDTO(userEntity);
         return result;
     }
 
     @Override
-    public UserEntity findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
+    public UserResponse createUser(UserRequest userRequest) {
+        if (userRepository.existsByUsername(userRequest.getUsername()))
+            throw new RuntimeException("Username already exists");
 
-    @Override
-    public ApiResponse<UserEntity> createUser(UserDTO userDTO) {
-        if (userRepository.existsByUsername(userDTO.getUsername())) {
-            return new ApiResponse<>(409, "Username already exists", null);
-        }
-        UserEntity userEntity = userDTOConverter.toUserEntity(userDTO);
+        UserEntity userEntity = userDTOConverter.toUserEntity(userRequest);
         // Xử lý roles nếu có
-        if (userDTO.getRoles() != null && !userDTO.getRoles().isEmpty()) {
-            List<Long> roleIds = userDTO.getRoles().stream()
+        if (userRequest.getRoles() != null && !userRequest.getRoles().isEmpty()) {
+            List<Long> roleIds = userRequest.getRoles().stream()
                     .map(roleDTO -> roleDTO.getId())
                     .toList();
             List<RoleEntity> roles = roleRepository.findAllById(roleIds);
             userEntity.setRoles(roles);
         }
-        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+        String encodedPassword = passwordEncoder.encode(userRequest.getPassword());
         userEntity.setPassword(encodedPassword);
+        UserEntity result = userRepository.save(userEntity);
 
-        userRepository.save(userEntity);
-        return new ApiResponse<>(201, "User created successfully", userEntity);
+
+        return userDTOConverter.toUserDTO(result);
     }
 
     @Override
-    public TourResponse updateUser(UserDTO userDTO) {
-        UserEntity userEntity = userRepository.findById(userDTO.getId()).get();
-        if (userEntity == null) return null;
+    public UserResponse updateUser(UserRequest userRequest) {
+        UserEntity userEntity = userRepository.findById(userRequest.getId()).get();
         // Cập nhật các trường
-        userEntity.setUsername(userDTO.getUsername());
-        userEntity.setEmail(userDTO.getEmail());
-        userEntity.setFullname(userDTO.getFullname());
-        userEntity.setPassword(userDTO.getPassword());
+        userEntity.setUsername(userRequest.getUsername());
+        userEntity.setEmail(userRequest.getEmail());
+        userEntity.setFullname(userRequest.getFullname());
+        userEntity.setPassword(userRequest.getPassword());
         // Xử lý roles nếu có
         if (userEntity.getRoles() != null) {
             userEntity.getRoles().clear(); // Xóa hết roles cũ trước khi set roles mới
         }
-        if (userDTO.getRoles() != null && !userDTO.getRoles().isEmpty()) {
-            List<Long> roleIds = userDTO.getRoles().stream()
+        if (userRequest.getRoles() != null && !userRequest.getRoles().isEmpty()) {
+            List<Long> roleIds = userRequest.getRoles().stream()
                     .map(roleDTO -> roleDTO.getId())
                     .toList();
             List<RoleEntity> roles = roleRepository.findAllById(roleIds);
@@ -120,8 +114,8 @@ public class UserServiceImpl implements UserService {
         } else {
             userEntity.setRoles(null);
         }
-        userRepository.save(userEntity);
-        return new TourResponse("success", "Cập nhật thành công user");
+        UserEntity result = userRepository.save(userEntity);
+        return userDTOConverter.toUserDTO(result);
     }
 
     @Override

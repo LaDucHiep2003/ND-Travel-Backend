@@ -2,7 +2,9 @@ package com.javaweb.api.admin;
 
 
 import com.javaweb.model.OrderDTO;
-import com.javaweb.model.response.ApiResponse;
+import com.javaweb.model.ApiResponse;
+import com.javaweb.model.request.OrderRequest;
+import com.javaweb.model.response.OrderResponse;
 import com.javaweb.repository.entity.OrderEntity;
 import com.javaweb.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,37 +22,41 @@ public class OrderAPI {
     private OrderService orderService;
 
     @GetMapping("orders")
-    public List<OrderDTO> findALl(@RequestParam Map<String, Object> params){
-        List<OrderDTO> result = orderService.findAll(params);
+    public List<OrderResponse> findALl(@RequestParam Map<String, Object> params){
+        List<OrderResponse> result = orderService.findAll(params);
         return result;
     }
 
     @GetMapping("orders/{id}")
-    public OrderDTO findById(@PathVariable Long id){
+    public OrderResponse findById(@PathVariable Long id){
         return orderService.findById(id);
     }
 
     @PostMapping("orders")
-    public ResponseEntity<ApiResponse<OrderEntity>> order(@RequestBody OrderDTO orderDTO){
-        ApiResponse<OrderEntity> result = orderService.order(orderDTO);
-        return ResponseEntity.ok(result);
+    public ApiResponse<OrderResponse> order(@RequestBody OrderRequest orderRequest){
+        ApiResponse<OrderResponse> apiResponse = new ApiResponse<>();
+        OrderResponse result = orderService.order(orderRequest);
+        apiResponse.setResult(result);
+        return apiResponse;
     }
 
     @PutMapping("orders")
-    public ResponseEntity<ApiResponse<OrderEntity>> edit(@RequestBody OrderDTO orderDTO){
-        ApiResponse<OrderEntity> result = orderService.edit(orderDTO);
-        return ResponseEntity.ok(result);
+    public ApiResponse<OrderResponse> edit(@RequestBody OrderRequest orderDTO){
+        ApiResponse<OrderResponse> apiResponse = new ApiResponse<>();
+        OrderResponse result = orderService.order(orderDTO);
+        apiResponse.setResult(result);
+        return apiResponse;
     }
 
     @DeleteMapping("orders")
-    public ResponseEntity<ApiResponse<OrderEntity>> delete(@RequestParam List<Long> ids){
-        ApiResponse<OrderEntity> result = orderService.delete(ids);
-        return ResponseEntity.ok(result);
+    public String delete(@RequestParam List<Long> ids){
+        orderService.delete(ids);
+        return "User has been deleted";
     }
 
     @PostMapping("orders/confirm")
-    public ResponseEntity<ApiResponse<OrderEntity>> confirm(@RequestBody List<Long> ids){
-        ApiResponse<OrderEntity> result = orderService.confirm(ids);
-        return ResponseEntity.ok(result);
+    public String confirm(@RequestBody List<Long> ids){
+        orderService.confirm(ids);
+        return "Order has been confirmed";
     }
 }

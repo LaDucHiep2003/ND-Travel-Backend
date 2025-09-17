@@ -1,87 +1,31 @@
-package com.javaweb.repository.entity;
-
-import jakarta.persistence.*;
+package com.javaweb.model.request;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name="tours")
-public class TourEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+public class TourRequest {
     private Long id;
-
-    @Column(name = "title", nullable = false)
     private String title;
-
-    @Column(name = "thumbnail")
     private String thumbnail;
-
-    @Column(name = "images")
     private String images;
-
-    @Column(name = "departure_from")
     private String departure_from;
-
-    @Column(name = "destination")
     private String destination;
-
-    @Column(name = "duration")
     private String duration;
-
-    @Column(name = "seats")
     private Integer seats;
-
-    @Column(name = "transport")
     private String transport;
-
-    @Column(name = "description")
     private String description;
-
-    @Column(name = "itinerary")
     private String itinerary;
-
-    @Column(name = "location")
     private String location;
-
-    @Column(name = "price_adult", nullable = false)
     private Integer price_adult;
-
-    @Column(name = "price_child", nullable = false)
     private Integer price_child;
-
-    @Column(name = "price_infant", nullable = false)
     private Integer price_infant;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private Status status = Status.active;
-
-    @Column(name = "departure_date")
+    private String status;
     private LocalDate departure_date;
-
-    @Column(name = "end_date")
     private LocalDate end_date;
-
-    @Column(name = "discount")
     private Double discount;
-
-    @Column(name = "deleted")
-    private Boolean deleted;
-
-    @ManyToMany
-    @JoinTable(
-            name = "tour_category_mapping",
-            joinColumns = @JoinColumn(name = "tour_id"),             // Đảo lại tour_id là chủ
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<TourCategoryEntity> tourCategories = new ArrayList<>();
-
-
-    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItemEntity> cartItems = new ArrayList<>();
+    private List<Long> category_id;
+    private Boolean deleted = false;
 
     public Long getId() {
         return id;
@@ -203,11 +147,11 @@ public class TourEntity {
         this.price_infant = price_infant;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -235,12 +179,12 @@ public class TourEntity {
         this.discount = discount;
     }
 
-    public List<TourCategoryEntity> getTourCategories() {
-        return tourCategories;
+    public List<Long> getCategory_id() {
+        return category_id;
     }
 
-    public void setTourCategories(List<TourCategoryEntity> tourCategories) {
-        this.tourCategories = tourCategories;
+    public void setCategory_id(List<Long> category_id) {
+        this.category_id = category_id;
     }
 
     public Boolean getDeleted() {
@@ -249,13 +193,5 @@ public class TourEntity {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
-    }
-
-    public List<CartItemEntity> getCartItems() {
-        return cartItems;
-    }
-
-    public void setCartItems(List<CartItemEntity> cartItems) {
-        this.cartItems = cartItems;
     }
 }

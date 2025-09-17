@@ -1,7 +1,9 @@
 package com.javaweb.api.admin;
 
+import com.javaweb.model.ApiResponse;
 import com.javaweb.model.TourDTO;
-import com.javaweb.model.TourResponse;
+import com.javaweb.model.request.TourRequest;
+import com.javaweb.model.response.TourResponse;
 import com.javaweb.model.response.PageResponse;
 import com.javaweb.service.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,38 +21,42 @@ public class TourAPI {
     private TourService tourService;
 
     @GetMapping("/tours")
-    public ResponseEntity<PageResponse<TourDTO>> findAll(@RequestParam Map<String, Object> params) {
+    public PageResponse<TourResponse> findAll(@RequestParam Map<String, Object> params) {
         int page = params.containsKey("page") ? Integer.parseInt((String) params.get("page")) : 1;
         int size = params.containsKey("size") ? Integer.parseInt((String) params.get("size")) : 10;
-        List<TourDTO> result = tourService.findAll(params);
+        List<TourResponse> result = tourService.findAll(params);
         long total = tourService.count(params);
 
-        PageResponse<TourDTO> response = new PageResponse<>(result, total, page, size);
+        PageResponse<TourResponse> response = new PageResponse<>(result, total, page, size);
 
-        return ResponseEntity.ok(response);
+        return response;
     }
 
     @GetMapping("/tours/{id}")
-    public TourDTO findById(@PathVariable Long id) {
-        TourDTO result = tourService.findById(id);
+    public TourResponse findById(@PathVariable Long id) {
+        TourResponse result = tourService.findById(id);
         return result;
     }
 
     @PostMapping("/tours")
-    public ResponseEntity<TourResponse> createTour(@RequestBody TourDTO tourDTO) {
+    public ApiResponse<TourResponse> createTour(@RequestBody TourRequest tourDTO) {
+        ApiResponse<TourResponse> apiResponse = new ApiResponse<>();
         TourResponse msg = tourService.createTour(tourDTO);
-        return ResponseEntity.ok(msg);
+        apiResponse.setResult(msg);
+        return apiResponse;
     }
 
     @PatchMapping("/tours")
-    public ResponseEntity<TourResponse> updateTour(@RequestBody TourDTO tourDTO) {
+    public ApiResponse<TourResponse> updateTour(@RequestBody TourRequest tourDTO) {
+        ApiResponse<TourResponse> apiResponse = new ApiResponse<>();
         TourResponse msg = tourService.editTour(tourDTO);
-        return ResponseEntity.ok(msg);
+        apiResponse.setResult(msg);
+        return apiResponse;
     }
 
     @DeleteMapping("/tours")
-    public ResponseEntity<TourResponse> deleteTour(@RequestParam List<Long> ids) {
-        TourResponse msg = tourService.deleteTour(ids);
-        return ResponseEntity.ok(msg);
+    public String deleteTour(@RequestParam List<Long> ids) {
+        tourService.deleteTour(ids);
+        return "Tour has been deleted";
     }
 }

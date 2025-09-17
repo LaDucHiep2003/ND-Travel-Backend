@@ -2,6 +2,7 @@ package com.javaweb.converter;
 
 import com.javaweb.model.OrderDTO;
 import com.javaweb.model.OrderItemDTO;
+import com.javaweb.model.response.OrderResponse;
 import com.javaweb.repository.entity.OrderEntity;
 import com.javaweb.repository.entity.OrderItemEntity;
 import org.modelmapper.ModelMapper;
@@ -19,8 +20,8 @@ public class OrderDTOConverter {
     @Autowired
     private OrderItemDTOConverter orderItemDTOConverter;
 
-    public OrderDTO toOrderDTO(OrderEntity orderEntity) {
-        OrderDTO orderDTO = modelMapper.map(orderEntity, OrderDTO.class);
+    public OrderResponse toOrderDTO(OrderEntity orderEntity) {
+        OrderResponse orderDTO = modelMapper.map(orderEntity, OrderResponse.class);
         
         // Set user info
         if (orderEntity.getUser() != null) {

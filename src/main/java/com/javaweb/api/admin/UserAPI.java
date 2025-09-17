@@ -2,7 +2,9 @@ package com.javaweb.api.admin;
 
 import com.javaweb.model.TourResponse;
 import com.javaweb.model.UserDTO;
-import com.javaweb.model.response.ApiResponse;
+import com.javaweb.model.ApiResponse;
+import com.javaweb.model.request.UserRequest;
+import com.javaweb.model.response.UserResponse;
 import com.javaweb.repository.entity.UserEntity;
 import com.javaweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,27 +28,24 @@ public class UserAPI {
     }
 
     @GetMapping("/users/{id}")
-    public UserDTO findById(@PathVariable Long id) {
+    public UserResponse findById(@PathVariable Long id) {
         return userService.findById(id);
     }
 
     @PostMapping("/users")
-    public ResponseEntity<ApiResponse<UserEntity>> createUser(@RequestBody UserDTO userDTO) {
-        ApiResponse<UserEntity> response = userService.createUser(userDTO);
-
-        // Nếu status là 201 (tạo thành công)
-        if (response.getStatus() == 201) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        }
-
-        // Nếu status là 409 (xung đột), hoặc lỗi khác (tùy bạn xử lý)
-        return ResponseEntity.status(HttpStatus.valueOf(response.getStatus())).body(response);
+    public ApiResponse<UserResponse> createUser(@RequestBody UserRequest userRequest) {
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+        UserResponse result = userService.createUser(userRequest);
+        apiResponse.setResult(result);
+        return apiResponse;
     }
 
-    @PatchMapping("/users")
-    public ResponseEntity<TourResponse> updateUser(@RequestBody UserDTO userDTO) {
-        TourResponse msg = userService.updateUser(userDTO);
-        return ResponseEntity.ok(msg);
+    @PutMapping("/users")
+    public ApiResponse<UserResponse> updateUser(@RequestBody UserRequest userRequest) {
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+        UserResponse result = userService.updateUser(userRequest);
+        apiResponse.setResult(result);
+        return apiResponse;
     }
     @DeleteMapping("/users")
     public ResponseEntity<TourResponse> deleteUser(@RequestParam List<Long> ids) {

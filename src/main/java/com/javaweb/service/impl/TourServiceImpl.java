@@ -4,7 +4,8 @@ import com.javaweb.builder.TourSearchBuilder;
 import com.javaweb.converter.TourDTOConverter;
 import com.javaweb.converter.TourSearchBuilderConverter;
 import com.javaweb.model.TourDTO;
-import com.javaweb.model.TourResponse;
+import com.javaweb.model.request.TourRequest;
+import com.javaweb.model.response.TourResponse;
 import com.javaweb.repository.TourCategoryRepository;
 import com.javaweb.repository.TourRepository;
 import com.javaweb.repository.entity.TourCategoryEntity;
@@ -38,12 +39,12 @@ public class TourServiceImpl implements TourService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<TourDTO> findAll(Map<String, Object> params) {
+    public List<TourResponse> findAll(Map<String, Object> params) {
         TourSearchBuilder tourSearchBuilders = tourSearchBuilderConverter.toTourSearchBuilder(params);
         List<TourEntity> tourEntities = tourRepository.findAll(tourSearchBuilders);
-        List<TourDTO> result = new ArrayList<>();
+        List<TourResponse> result = new ArrayList<>();
         for(TourEntity item : tourEntities){
-            TourDTO tourDTO = tourDTOConverter.toTourDTO(item);
+            TourResponse tourDTO = tourDTOConverter.toTourDTO(item);
             result.add(tourDTO);
         }
         return result;
@@ -56,28 +57,28 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public TourDTO findById(Long id) {
+    public TourResponse findById(Long id) {
         TourEntity tourEntity = tourRepository.findById(id).get();
-        TourDTO tourDTO = tourDTOConverter.toTourDTO(tourEntity);
-        List<Long> categoryIds = tourEntity.getTourCategories().stream()
-                .map(TourCategoryEntity::getId)
-                .collect(Collectors.toList());
-        tourDTO.setCategory_id(categoryIds);
+        TourResponse tourDTO = tourDTOConverter.toTourDTO(tourEntity);
+//        List<Long> categoryIds = tourEntity.getTourCategories().stream()
+//                .map(TourCategoryEntity::getId)
+//                .collect(Collectors.toList());
+//        tourDTO.setCategory_id(categoryIds);
         return tourDTO;
     }
 
     @Override
-    public TourResponse createTour(TourDTO tourDTO) {
+    public TourResponse createTour(TourRequest tourDTO) {
         TourEntity tourEntity = new TourEntity();
         modelMapper.map(tourDTO, tourEntity);
         List<TourCategoryEntity> tourCategories = tourCategoryRepository.findAllById(tourDTO.getCategory_id());
         tourEntity.setTourCategories(tourCategories);
-        tourRepository.save(tourEntity);
-        return new TourResponse("success", "Thêm thành công tour");
+        TourEntity result = tourRepository.save(tourEntity);
+        return tourDTOConverter.toTourDTO(result);
     }
 
     @Override
-    public TourResponse editTour(TourDTO tourDTO) {
+    public TourResponse editTour(TourRequest tourDTO) {
         TourEntity tourEntity = tourRepository.findById(tourDTO.getId()).get();
         modelMapper.map(tourDTO, tourEntity);
 //        Xoa danh muc cu
@@ -87,14 +88,13 @@ public class TourServiceImpl implements TourService {
             List<TourCategoryEntity> tourCategories = tourCategoryRepository.findAllById(tourDTO.getCategory_id());
             tourEntity.setTourCategories(tourCategories);
         }
-        tourRepository.save(tourEntity);
-        return new TourResponse("success", "Cập nhật thành công tour");
+        TourEntity result = tourRepository.save(tourEntity);
+        return tourDTOConverter.toTourDTO(result);
     }
 
     @Transactional
     @Override
-    public TourResponse deleteTour(List<Long> ids) {
+    public void deleteTour(List<Long> ids) {
         tourRepository.deleteTour(ids);
-        return new TourResponse("success", "Xóa thành công tour");
     }
 }

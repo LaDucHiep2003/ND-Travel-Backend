@@ -1,4 +1,4 @@
-package com.javaweb.model.request;
+package com.javaweb.model.response;
 
 import com.javaweb.model.OrderItemDTO;
 
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderRequest {
+public class OrderResponse {
     private Long id;
     private Long userId;
     private String userName;
@@ -16,6 +16,8 @@ public class OrderRequest {
     private String status;
     private String paymentMethod;
     private String note;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private List<OrderItemDTO> orderItems = new ArrayList<>();
     private String customer_name;
 
@@ -81,6 +83,22 @@ public class OrderRequest {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public List<OrderItemDTO> getOrderItems() {
