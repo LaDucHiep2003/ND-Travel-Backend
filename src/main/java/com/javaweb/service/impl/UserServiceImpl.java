@@ -16,6 +16,7 @@ import com.javaweb.repository.RoleRepository;
 import com.javaweb.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,12 +47,12 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
 
     @Override
-    public List<UserDTO> findAll(Map<String, Object> params) {
+    public List<UserResponse> findAll(Map<String, Object> params) {
         UserSearchBuilder userSearchBuilder = userSearchBuilderConverter.toUserSearchBuilder(params);
         List<UserEntity> userEntities = userRepository.findAll(userSearchBuilder);
-        List<UserDTO> result = new ArrayList<>();
+        List<UserResponse> result = new ArrayList<>();
         for (UserEntity userEntity : userEntities) {
-            UserDTO userDTO = modelMapper.map(userEntity, UserDTO.class);
+            UserResponse userDTO = modelMapper.map(userEntity, UserResponse.class);
             // Chuyển roles sang RoleDTO
             if (userEntity.getRoles() != null) {
                 List<RoleDTO> roles = userEntity.getRoles().stream()
@@ -73,24 +74,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse createUser(UserRequest userRequest) {
-        if (userRepository.existsByUsername(userRequest.getUsername()))
+        if(userRepository.existsByUsername(userRequest.getUsername()))
             throw new RuntimeException("Username already exists");
+        UserEntity user = userDTOConverter.toUserEntity(userRequest);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
-        UserEntity userEntity = userDTOConverter.toUserEntity(userRequest);
-        // Xử lý roles nếu có
-        if (userRequest.getRoles() != null && !userRequest.getRoles().isEmpty()) {
-            List<Long> roleIds = userRequest.getRoles().stream()
-                    .map(roleDTO -> roleDTO.getId())
-                    .toList();
-            List<RoleEntity> roles = roleRepository.findAllById(roleIds);
-            userEntity.setRoles(roles);
-        }
-        String encodedPassword = passwordEncoder.encode(userRequest.getPassword());
-        userEntity.setPassword(encodedPassword);
-        UserEntity result = userRepository.save(userEntity);
-
-
-        return userDTOConverter.toUserDTO(result);
+        return userDTOConverter.toUserDTO(userRepository.save(user));
     }
 
     @Override

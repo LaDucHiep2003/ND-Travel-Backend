@@ -1,15 +1,15 @@
 package com.javaweb.service;
 
-import com.javaweb.model.RoleDTO;
-import com.javaweb.model.TourResponse;
+import com.javaweb.model.request.RoleRequest;
+import com.javaweb.model.response.RoleResponse;
 
 import java.util.List;
 import java.util.Map;
 
 public interface RoleService {
-    List<RoleDTO> findALL(Map<String,Object> params);
-    RoleDTO findById(Long id);
-    TourResponse createRole(RoleDTO role);
-    TourResponse updateRole(RoleDTO role);
-    TourResponse deleteRole(List<Long> ids);
+    List<RoleResponse> findALL(Map<String,Object> params);
+    RoleResponse findById(Long id);
+    RoleResponse createRole(RoleRequest role);
+    RoleResponse updateRole(RoleRequest role);
+    void deleteRole(List<Long> ids);
 }

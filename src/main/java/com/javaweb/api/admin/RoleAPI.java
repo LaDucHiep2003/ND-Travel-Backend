@@ -1,13 +1,13 @@
 package com.javaweb.api.admin;
 
+import com.javaweb.model.ApiResponse;
 import com.javaweb.model.PermissionDTO;
-import com.javaweb.model.RoleDTO;
-import com.javaweb.model.TourResponse;
+import com.javaweb.model.request.RoleRequest;
+import com.javaweb.model.response.RoleResponse;
 import com.javaweb.service.RoleService;
 import com.javaweb.service.impl.PermissionsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,38 +23,42 @@ public class RoleAPI {
     private PermissionsService permissionsService;
 
     @GetMapping("/roles")
-    List<RoleDTO> findAll(@RequestParam Map<String, Object> params){
-        List<RoleDTO> result = roleService.findALL(params);
+    public List<RoleResponse> findAll(@RequestParam Map<String, Object> params){
+        List<RoleResponse> result = roleService.findALL(params);
         return result;
     }
 
     @GetMapping("/roles/permissions")
-    List<PermissionDTO> findAllPermissions(){
+    public List<PermissionDTO> findAllPermissions(){
         List<PermissionDTO> result = permissionsService.findAll();
         return result;
     }
 
-    @GetMapping("/role/{id}")
-    RoleDTO findById(@PathVariable Long id){
-        RoleDTO result = roleService.findById(id);
+    @GetMapping("/roles/{id}")
+    public RoleResponse findById(@PathVariable Long id){
+        RoleResponse result = roleService.findById(id);
         return result;
     }
 
-    @PostMapping("/role")
-    ResponseEntity<TourResponse> createRole(@RequestBody RoleDTO roleDTO){
-        TourResponse msg = roleService.createRole(roleDTO);
-        return ResponseEntity.ok(msg);
+    @PostMapping("/roles")
+    public ApiResponse<RoleResponse> createRole(@RequestBody RoleRequest roleDTO){
+        ApiResponse<RoleResponse> apiResponse = new ApiResponse<>();
+        RoleResponse msg = roleService.createRole(roleDTO);
+        apiResponse.setResult(msg);
+        return apiResponse;
     }
 
-    @PatchMapping("/role")
-    ResponseEntity<TourResponse> updateRole(@RequestBody RoleDTO roleDTO){
-        TourResponse msg = roleService.updateRole(roleDTO);
-        return ResponseEntity.ok(msg);
+    @PutMapping("/roles")
+    public ApiResponse<RoleResponse> updateRole(@RequestBody RoleRequest roleDTO){
+        ApiResponse<RoleResponse> apiResponse = new ApiResponse<>();
+        RoleResponse msg = roleService.updateRole(roleDTO);
+        apiResponse.setResult(msg);
+        return apiResponse;
     }
 
     @DeleteMapping("/roles")
-    ResponseEntity<TourResponse> deleteRole(@RequestParam List<Long> ids){
-        TourResponse msg = roleService.deleteRole(ids);
-        return ResponseEntity.ok(msg);
+    public String deleteRole(@RequestParam List<Long> ids){
+        roleService.deleteRole(ids);
+        return "Role has been deleted";
     }
 }

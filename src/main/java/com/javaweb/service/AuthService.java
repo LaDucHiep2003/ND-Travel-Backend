@@ -1,7 +1,8 @@
 package com.javaweb.service;
 
-import com.javaweb.model.response.AuthResponse;
+import com.javaweb.model.request.AuthenticationRequest;
+import com.javaweb.model.response.AuthenticationResponse;
 
 public interface AuthService {
-    AuthResponse login(String username, String password);
+    boolean login(AuthenticationRequest authenticationRequest);
 }

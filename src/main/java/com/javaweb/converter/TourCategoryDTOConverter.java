@@ -1,6 +1,7 @@
 package com.javaweb.converter;
 
 import com.javaweb.model.TourCategoryDTO;
+import com.javaweb.model.response.TourCategoryResponse;
 import com.javaweb.repository.entity.TourCategoryEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ public class TourCategoryDTOConverter {
     @Autowired
     private ModelMapper modelMapper;
 
-    public TourCategoryDTO tourCategoryDTO(TourCategoryEntity item){
-        return modelMapper.map(item, TourCategoryDTO.class);
+    public TourCategoryResponse tourCategoryDTO(TourCategoryEntity item){
+        return modelMapper.map(item, TourCategoryResponse.class);
     }
 }

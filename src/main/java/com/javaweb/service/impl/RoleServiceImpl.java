@@ -1,10 +1,13 @@
 package com.javaweb.service.impl;
 
+import com.javaweb.api.admin.RoleAPI;
 import com.javaweb.builder.RoleSearchBuilder;
 import com.javaweb.converter.RoleDTOConverter;
 import com.javaweb.converter.RoleSearchBuilderConverter;
 import com.javaweb.model.RoleDTO;
 import com.javaweb.model.TourResponse;
+import com.javaweb.model.request.RoleRequest;
+import com.javaweb.model.response.RoleResponse;
 import com.javaweb.repository.RoleRepository;
 import com.javaweb.repository.entity.RoleEntity;
 import com.javaweb.service.RoleService;
@@ -32,47 +35,47 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private ModelMapper modelMapper;
 
+
     @Override
-    public List<RoleDTO> findALL(Map<String, Object> params) {
+    public List<RoleResponse> findALL(Map<String, Object> params) {
         RoleSearchBuilder roleSearchBuilder = roleSearchBuilderConverter.toRoleSearchBuilder(params);
         List<RoleEntity> roleEntities = roleRepository.findAll(roleSearchBuilder);
-        List<RoleDTO> result = new ArrayList<>();
+        List<RoleResponse> result = new ArrayList<>();
         for(RoleEntity roleEntity : roleEntities) {
-            RoleDTO roleDTO = roleDTOConverter.toRoleDTO(roleEntity);
+            RoleResponse roleDTO = roleDTOConverter.toRoleDTO(roleEntity);
             result.add(roleDTO);
         }
         return result;
     }
 
     @Override
-    public RoleDTO findById(Long id) {
+    public RoleResponse findById(Long id) {
         RoleEntity roleEntity = roleRepository.findById(id).get();
-        RoleDTO result = roleDTOConverter.toRoleDTO(roleEntity);
+        RoleResponse result = roleDTOConverter.toRoleDTO(roleEntity);
         return result;
     }
 
     @Override
-    public TourResponse createRole(RoleDTO role) {
+    public RoleResponse createRole(RoleRequest role) {
         RoleEntity roleEntity = new RoleEntity();
         modelMapper.map(role, roleEntity);
-        roleRepository.save(roleEntity);
+        RoleEntity result = roleRepository.save(roleEntity);
 
-        return new TourResponse("success", "Thêm quyền thành công");
+        return roleDTOConverter.toRoleDTO(result);
     }
 
     @Override
-    public TourResponse updateRole(RoleDTO role) {
+    public RoleResponse updateRole(RoleRequest role) {
         RoleEntity roleEntity = roleRepository.findById(role.getId()).get();
         modelMapper.map(role, roleEntity);
-        roleRepository.save(roleEntity);
+        RoleEntity result = roleRepository.save(roleEntity);
 
-        return new TourResponse("success", "Chỉnh sửa quyền thành công");
+        return roleDTOConverter.toRoleDTO(result);
     }
 
     @Transactional
     @Override
-    public TourResponse deleteRole(List<Long> ids) {
+    public void deleteRole(List<Long> ids) {
         roleRepository.deleteRole(ids);
-        return new TourResponse("success", "Xóa quyền thành công");
     }
 }

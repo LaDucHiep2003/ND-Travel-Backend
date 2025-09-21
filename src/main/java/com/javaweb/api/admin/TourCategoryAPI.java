@@ -1,10 +1,10 @@
 package com.javaweb.api.admin;
 
-import com.javaweb.model.TourCategoryDTO;
-import com.javaweb.model.TourResponse;
+import com.javaweb.model.ApiResponse;
+import com.javaweb.model.request.TourCategoryRequest;
+import com.javaweb.model.response.TourCategoryResponse;
 import com.javaweb.service.TourCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,27 +18,32 @@ public class TourCategoryAPI {
     private TourCategoryService tourCategoryService;
 
     @GetMapping("/category")
-    public List<TourCategoryDTO> findAll(@RequestParam Map<String, Object> params){
+    public List<TourCategoryResponse> findAll(@RequestParam Map<String, Object> params){
         return tourCategoryService.findAll(params);
     }
+
     @GetMapping("/category/{id}")
-    public TourCategoryDTO findById(@PathVariable Long id){
+    public TourCategoryResponse findById(@PathVariable Long id){
         return tourCategoryService.findById(id);
     }
 
     @PostMapping("/category")
-    public ResponseEntity<TourResponse> createCategory(@RequestBody TourCategoryDTO tourCategoryDTO){
-        TourResponse result = tourCategoryService.createCategory(tourCategoryDTO);
-        return ResponseEntity.ok(result);
+    public ApiResponse<TourCategoryResponse> createCategory(@RequestBody TourCategoryRequest tourCategoryDTO){
+        ApiResponse<TourCategoryResponse> apiResponse = new ApiResponse<>();
+        TourCategoryResponse result = tourCategoryService.createCategory(tourCategoryDTO);
+        apiResponse.setResult(result);
+        return apiResponse;
     }
-    @PatchMapping("/category")
-    public ResponseEntity<TourResponse> updateCategory(@RequestBody TourCategoryDTO tourCategoryDTO){
-        TourResponse result = tourCategoryService.updateCategory(tourCategoryDTO);
-        return ResponseEntity.ok(result);
+    @PutMapping("/category")
+    public ApiResponse<TourCategoryResponse> updateCategory(@RequestBody TourCategoryRequest tourCategoryDTO){
+        ApiResponse<TourCategoryResponse> apiResponse = new ApiResponse<>();
+        TourCategoryResponse result = tourCategoryService.updateCategory(tourCategoryDTO);
+        apiResponse.setResult(result);
+        return apiResponse;
     }
     @DeleteMapping("/category")
-    public ResponseEntity<TourResponse> save(@RequestParam List<Long> ids){
-        TourResponse result = tourCategoryService.deleteCategory(ids);
-        return ResponseEntity.ok(result);
+    public String save(@RequestParam List<Long> ids){
+        tourCategoryService.deleteCategory(ids);
+        return "Category has been deleted";
     }
 }

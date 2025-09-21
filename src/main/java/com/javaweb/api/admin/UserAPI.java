@@ -1,14 +1,11 @@
 package com.javaweb.api.admin;
 
 import com.javaweb.model.TourResponse;
-import com.javaweb.model.UserDTO;
 import com.javaweb.model.ApiResponse;
 import com.javaweb.model.request.UserRequest;
 import com.javaweb.model.response.UserResponse;
-import com.javaweb.repository.entity.UserEntity;
 import com.javaweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +20,7 @@ public class UserAPI {
     private UserService userService;
 
     @GetMapping("/users")
-    public List<UserDTO> findAll(@RequestParam Map<String, Object> params) {
+    public List<UserResponse> findAll(@RequestParam Map<String, Object> params) {
         return userService.findAll(params);
     }
 

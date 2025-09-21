@@ -2,6 +2,7 @@ package com.javaweb.api.client;
 
 
 import com.javaweb.model.TourCategoryDTO;
+import com.javaweb.model.response.TourCategoryResponse;
 import com.javaweb.service.TourCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class TourCategoryClient {
     private TourCategoryService tourCategoryService;
 
     @GetMapping("/category")
-    public List<TourCategoryDTO> findAll(@RequestParam Map<String, Object> params){
+    public List<TourCategoryResponse> findAll(@RequestParam Map<String, Object> params){
         return tourCategoryService.findAll(params);
     }
 }
