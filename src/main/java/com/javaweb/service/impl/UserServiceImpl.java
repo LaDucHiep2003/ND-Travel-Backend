@@ -2,6 +2,8 @@ package com.javaweb.service.impl;
 
 import com.javaweb.builder.UserSearchBuilder;
 import com.javaweb.converter.UserSearchBuilderConverter;
+import com.javaweb.exception.AppException;
+import com.javaweb.exception.ErrorCode;
 import com.javaweb.model.UserDTO;
 import com.javaweb.converter.UserDTOConverter;
 import com.javaweb.model.RoleDTO;
@@ -75,7 +77,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse createUser(UserRequest userRequest) {
         if(userRepository.existsByUsername(userRequest.getUsername()))
-            throw new RuntimeException("Username already exists");
+            throw new AppException(ErrorCode.USER_EXISTED);
         UserEntity user = userDTOConverter.toUserEntity(userRequest);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));

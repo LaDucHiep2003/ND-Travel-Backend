@@ -1,5 +1,7 @@
 package com.javaweb.security;
 
+import com.javaweb.exception.AppException;
+import com.javaweb.exception.ErrorCode;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.repository.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         UserEntity user = userRepository.findByUsername(username);
-        if (user == null) throw new UsernameNotFoundException("User not found");
+        if (user == null) throw new AppException(ErrorCode.USER_EXISTED);
 
         // Lấy danh sách role code và chuyển thành GrantedAuthority
         List<GrantedAuthority> authorities = user.getRoles().stream()
