@@ -4,10 +4,13 @@ import com.javaweb.api.admin.RoleAPI;
 import com.javaweb.builder.RoleSearchBuilder;
 import com.javaweb.converter.RoleDTOConverter;
 import com.javaweb.converter.RoleSearchBuilderConverter;
+import com.javaweb.exception.AppException;
+import com.javaweb.exception.ErrorCode;
 import com.javaweb.model.RoleDTO;
 import com.javaweb.model.TourResponse;
 import com.javaweb.model.request.RoleRequest;
 import com.javaweb.model.response.RoleResponse;
+import com.javaweb.repository.PermissionRepository;
 import com.javaweb.repository.RoleRepository;
 import com.javaweb.repository.entity.RoleEntity;
 import com.javaweb.service.RoleService;
@@ -31,6 +34,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleDTOConverter roleDTOConverter;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -57,8 +63,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleResponse createRole(RoleRequest role) {
-        RoleEntity roleEntity = new RoleEntity();
-        modelMapper.map(role, roleEntity);
+        RoleEntity roleEntity = roleDTOConverter.toRoleEntity(role);
+        var permissions = permissionRepository.findAllById(role.getPermissionIds());
+        roleEntity.setPermissions(new ArrayList<>(permissions));
         RoleEntity result = roleRepository.save(roleEntity);
 
         return roleDTOConverter.toRoleDTO(result);
@@ -66,8 +73,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleResponse updateRole(RoleRequest role) {
-        RoleEntity roleEntity = roleRepository.findById(role.getId()).get();
+        RoleEntity roleEntity = roleRepository.findById(role.getId())
+                        .orElseThrow(()->new AppException(ErrorCode.ROLE_EXISTED));
         modelMapper.map(role, roleEntity);
+        if (role.getPermissionIds() != null) {
+            var permissions = permissionRepository.findAllById(role.getPermissionIds());
+            roleEntity.setPermissions(new ArrayList<>(permissions));
+        }
         RoleEntity result = roleRepository.save(roleEntity);
 
         return roleDTOConverter.toRoleDTO(result);

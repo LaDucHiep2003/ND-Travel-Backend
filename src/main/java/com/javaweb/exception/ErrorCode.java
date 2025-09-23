@@ -8,6 +8,7 @@ public enum ErrorCode {
     USER_EXISTED(500, "User already existed"),
     USER_NOT_FOUND(500, "User not found"),
     UNAUTHENTICATED(501, "Unauthenticated"),
+    ROLE_EXISTED(500, "Role already existed"),
     ;
 
     ErrorCode(int code, String message) {

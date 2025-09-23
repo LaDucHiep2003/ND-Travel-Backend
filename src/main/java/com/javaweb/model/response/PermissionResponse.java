@@ -1,18 +1,14 @@
 package com.javaweb.model.response;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RoleResponse {
+public class PermissionResponse {
     Long id;
     String name;
-    String code;
     String description;
-    List<PermissionResponse> permissions;
 }
