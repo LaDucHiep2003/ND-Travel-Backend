@@ -4,11 +4,9 @@ import com.javaweb.builder.UserSearchBuilder;
 import com.javaweb.converter.UserSearchBuilderConverter;
 import com.javaweb.exception.AppException;
 import com.javaweb.exception.ErrorCode;
-import com.javaweb.model.UserDTO;
 import com.javaweb.converter.UserDTOConverter;
 import com.javaweb.model.RoleDTO;
 import com.javaweb.model.TourResponse;
-import com.javaweb.model.ApiResponse;
 import com.javaweb.model.request.UserRequest;
 import com.javaweb.model.response.UserResponse;
 import com.javaweb.repository.UserRepository;
@@ -79,7 +77,6 @@ public class UserServiceImpl implements UserService {
         if(userRepository.existsByUsername(userRequest.getUsername()))
             throw new AppException(ErrorCode.USER_EXISTED);
         UserEntity user = userDTOConverter.toUserEntity(userRequest);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
         return userDTOConverter.toUserDTO(userRepository.save(user));
@@ -92,8 +89,8 @@ public class UserServiceImpl implements UserService {
         userEntity.setUsername(userRequest.getUsername());
         userEntity.setEmail(userRequest.getEmail());
         userEntity.setFullname(userRequest.getFullname());
-        userEntity.setPassword(userRequest.getPassword());
-        // Xử lý roles nếu có
+        userEntity.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        // Xử lý roles
         if (userEntity.getRoles() != null) {
             userEntity.getRoles().clear(); // Xóa hết roles cũ trước khi set roles mới
         }

@@ -1,71 +1,76 @@
 package com.javaweb.config;
 
-import com.javaweb.security.CustomAccessDeniedHandler;
-import com.javaweb.security.CustomUserDetailsService;
-import com.javaweb.security.JwtAuthenticationEntryPoint;
-import com.javaweb.security.JwtAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.crypto.spec.SecretKeySpec;
+
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    @Value("${app.secret.key}")
+    private String secretKey;
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
-    private CustomAccessDeniedHandler accessDeniedHandler;
-
-    @Autowired
-    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private final String[] PUBLIC_POST_ENDPOINTS = {
+            "/api/auth/login", "/api/auth/introspect"
+    };
+    private final String[] PUBLIC_GET_ENDPOINTS = {
+            "/api/users", "/api/roles"
+    };
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()
-//                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "STAFF")
-//                        .anyRequest().denyAll()
-                )
-                .cors(Customizer.withDefaults())
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(authenticationEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler)
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeHttpRequests(request ->
+                request.requestMatchers(HttpMethod.POST, PUBLIC_POST_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_GET_ENDPOINTS).hasRole("admin")
+                        .anyRequest().authenticated());
 
-        return http.build();
+        httpSecurity.oauth2ResourceServer(oauth2 ->
+                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+        );
+
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+
+        return httpSecurity.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        builder
-                .userDetailsService(customUserDetailsService)
-                .passwordEncoder(passwordEncoder());
-        return builder.build();
+    public JwtDecoder jwtDecoder() {
+        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), "HS512");
+        return NimbusJwtDecoder
+                .withSecretKey(secretKeySpec)
+                .macAlgorithm(MacAlgorithm.HS512)
+                .build();
     }
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+
+        return converter;
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(10);
     }
 }
 

@@ -5,8 +5,10 @@ import com.javaweb.model.ApiResponse;
 import com.javaweb.model.request.UserRequest;
 import com.javaweb.model.response.UserResponse;
 import com.javaweb.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class UserAPI {
     @Autowired
     private UserService userService;

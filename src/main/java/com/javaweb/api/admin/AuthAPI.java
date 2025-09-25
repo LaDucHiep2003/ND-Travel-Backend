@@ -16,7 +16,7 @@ import java.text.ParseException;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/admin")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthAPI {
     @Autowired

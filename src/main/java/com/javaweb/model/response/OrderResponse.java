@@ -1,119 +1,29 @@
 package com.javaweb.model.response;
 
 import com.javaweb.model.OrderItemDTO;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderResponse {
-    private Long id;
-    private Long userId;
-    private String userName;
-    private LocalDateTime orderDate;
-    private BigDecimal totalPrice;
-    private String status;
-    private String paymentMethod;
-    private String note;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private List<OrderItemDTO> orderItems = new ArrayList<>();
-    private String customer_name;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public List<OrderItemDTO> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItemDTO> orderItems) {
-        this.orderItems = orderItems;
-    }
-
-    public String getCustomer_name() {
-        return customer_name;
-    }
-
-    public void setCustomer_name(String customer_name) {
-        this.customer_name = customer_name;
-    }
+    Long id;
+    Long userId;
+    String userName;
+    LocalDateTime orderDate;
+    BigDecimal totalPrice;
+    String status;
+    String paymentMethod;
+    String note;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
+    List<OrderItemDTO> orderItems = new ArrayList<>();
+    String customer_name;
 }
