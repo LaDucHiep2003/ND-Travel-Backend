@@ -1,13 +1,10 @@
 package com.javaweb.service.impl;
 
-import com.javaweb.api.admin.RoleAPI;
 import com.javaweb.builder.RoleSearchBuilder;
 import com.javaweb.converter.RoleDTOConverter;
 import com.javaweb.converter.RoleSearchBuilderConverter;
 import com.javaweb.exception.AppException;
 import com.javaweb.exception.ErrorCode;
-import com.javaweb.model.RoleDTO;
-import com.javaweb.model.TourResponse;
 import com.javaweb.model.request.RoleRequest;
 import com.javaweb.model.response.RoleResponse;
 import com.javaweb.repository.PermissionRepository;

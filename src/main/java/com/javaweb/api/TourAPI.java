@@ -1,13 +1,11 @@
-package com.javaweb.api.admin;
+package com.javaweb.api;
 
 import com.javaweb.model.ApiResponse;
-import com.javaweb.model.TourDTO;
 import com.javaweb.model.request.TourRequest;
 import com.javaweb.model.response.TourResponse;
 import com.javaweb.model.response.PageResponse;
 import com.javaweb.service.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class TourAPI {
     @Autowired
     private TourService tourService;
@@ -33,9 +31,10 @@ public class TourAPI {
     }
 
     @GetMapping("/tours/{id}")
-    public TourResponse findById(@PathVariable Long id) {
-        TourResponse result = tourService.findById(id);
-        return result;
+    public ApiResponse<TourResponse> findById(@PathVariable Long id) {
+        return ApiResponse.<TourResponse>builder()
+                .result(tourService.findById(id))
+                .build();
     }
 
     @PostMapping("/tours")
@@ -55,8 +54,10 @@ public class TourAPI {
     }
 
     @DeleteMapping("/tours")
-    public String deleteTour(@RequestParam List<Long> ids) {
+    public ApiResponse<String> deleteTour(@RequestParam List<Long> ids) {
         tourService.deleteTour(ids);
-        return "Tour has been deleted";
+        return ApiResponse.<String>builder()
+                .result("Tour has been deleted")
+                .build();
     }
 }

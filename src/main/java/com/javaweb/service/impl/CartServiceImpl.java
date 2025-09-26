@@ -2,6 +2,7 @@ package com.javaweb.service.impl;
 
 import com.javaweb.converter.CartDTOConverter;
 import com.javaweb.model.CartDTO;
+import com.javaweb.model.response.CartResponse;
 import com.javaweb.repository.CartRepository;
 import com.javaweb.repository.entity.CartEntity;
 import com.javaweb.service.CartService;
@@ -21,11 +22,11 @@ public class CartServiceImpl implements CartService {
     private CartDTOConverter cartDTOConverter;
 
     @Override
-    public List<CartDTO> getAll() {
+    public List<CartResponse> getAll() {
         List<CartEntity> list = cartRepository.findAll();
-        List<CartDTO> result = new ArrayList<>();
+        List<CartResponse> result = new ArrayList<>();
         for (CartEntity cartEntity : list) {
-            CartDTO cartDTO = cartDTOConverter.toCartDTO(cartEntity);
+            CartResponse cartDTO = cartDTOConverter.toCartDTO(cartEntity);
             result.add(cartDTO);
         }
         return result;

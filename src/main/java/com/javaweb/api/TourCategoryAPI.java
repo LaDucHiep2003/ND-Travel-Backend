@@ -1,8 +1,10 @@
-package com.javaweb.api.admin;
+package com.javaweb.api;
 
+import com.google.protobuf.Api;
 import com.javaweb.model.ApiResponse;
 import com.javaweb.model.request.TourCategoryRequest;
 import com.javaweb.model.response.TourCategoryResponse;
+import com.javaweb.model.response.TourResponse;
 import com.javaweb.service.TourCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,19 +14,21 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class TourCategoryAPI {
     @Autowired
     private TourCategoryService tourCategoryService;
 
     @GetMapping("/category")
-    public List<TourCategoryResponse> findAll(@RequestParam Map<String, Object> params){
-        return tourCategoryService.findAll(params);
+    public ApiResponse<List<TourCategoryResponse>> findAll(@RequestParam Map<String, Object> params){
+        return ApiResponse.<List<TourCategoryResponse>>builder()
+                .result(tourCategoryService.findAll(params)).build();
     }
 
     @GetMapping("/category/{id}")
-    public TourCategoryResponse findById(@PathVariable Long id){
-        return tourCategoryService.findById(id);
+    public ApiResponse<TourCategoryResponse> findById(@PathVariable Long id){
+        return ApiResponse.<TourCategoryResponse>builder()
+                .result(tourCategoryService.findById(id)).build();
     }
 
     @PostMapping("/category")
@@ -42,8 +46,9 @@ public class TourCategoryAPI {
         return apiResponse;
     }
     @DeleteMapping("/category")
-    public String save(@RequestParam List<Long> ids){
+    public ApiResponse<String> save(@RequestParam List<Long> ids){
         tourCategoryService.deleteCategory(ids);
-        return "Category has been deleted";
+        return ApiResponse.<String>builder()
+                .result("Category has been deleted").build();
     }
 }

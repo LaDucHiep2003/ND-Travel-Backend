@@ -13,5 +13,5 @@ public interface UserService {
     UserResponse findById(Long id);
     UserResponse createUser(UserRequest userRequest);
     UserResponse updateUser(UserRequest userRequest);
-    TourResponse deleteUser(List<Long> ids);
+    void deleteUser(List<Long> ids);
 } 

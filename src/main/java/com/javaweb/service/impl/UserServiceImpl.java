@@ -77,6 +77,10 @@ public class UserServiceImpl implements UserService {
         if(userRepository.existsByUsername(userRequest.getUsername()))
             throw new AppException(ErrorCode.USER_EXISTED);
         UserEntity user = userDTOConverter.toUserEntity(userRequest);
+        if(userRequest.getRoleId() != null){
+            var roleId = roleRepository.findAllById(userRequest.getRoleId());
+            user.setRoles(new ArrayList<>(roleId));
+        }
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
         return userDTOConverter.toUserDTO(userRepository.save(user));
@@ -94,12 +98,9 @@ public class UserServiceImpl implements UserService {
         if (userEntity.getRoles() != null) {
             userEntity.getRoles().clear(); // Xóa hết roles cũ trước khi set roles mới
         }
-        if (userRequest.getRoles() != null && !userRequest.getRoles().isEmpty()) {
-            List<Long> roleIds = userRequest.getRoles().stream()
-                    .map(roleDTO -> roleDTO.getId())
-                    .toList();
-            List<RoleEntity> roles = roleRepository.findAllById(roleIds);
-            userEntity.setRoles(roles);
+        if (userRequest.getRoleId() != null && !userRequest.getRoleId().isEmpty()) {
+            var roleId = roleRepository.findAllById(userRequest.getRoleId());
+            userEntity.setRoles(new ArrayList<>(roleId));
         } else {
             userEntity.setRoles(null);
         }
@@ -109,8 +110,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public TourResponse deleteUser(List<Long> ids) {
+    public void deleteUser(List<Long> ids) {
         userRepository.deleteUser(ids);
-        return new TourResponse("success", "Xóa thành công user");
     }
 } 

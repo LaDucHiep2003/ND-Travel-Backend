@@ -1,7 +1,9 @@
-package com.javaweb.api.client;
+package com.javaweb.api;
 
 
+import com.javaweb.model.ApiResponse;
 import com.javaweb.model.CartDTO;
+import com.javaweb.model.response.CartResponse;
 import com.javaweb.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +21,9 @@ public class CartAPI {
     private CartService cartService;
 
     @GetMapping("")
-    public List<CartDTO> getAll() {
-        return cartService.getAll();
+    public ApiResponse<List<CartResponse>> getAll() {
+        return ApiResponse.<List<CartResponse>>builder()
+                .result(cartService.getAll())
+                .build();
     }
 }

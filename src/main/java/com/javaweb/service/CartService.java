@@ -1,9 +1,10 @@
 package com.javaweb.service;
 
 import com.javaweb.model.CartDTO;
+import com.javaweb.model.response.CartResponse;
 
 import java.util.List;
 
 public interface CartService {
-    List<CartDTO> getAll();
+    List<CartResponse> getAll();
 }

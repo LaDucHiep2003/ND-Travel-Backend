@@ -1,5 +1,6 @@
-package com.javaweb.api.admin;
+package com.javaweb.api;
 
+import com.javaweb.model.ApiResponse;
 import com.javaweb.model.TourItineraryDTO;
 import com.javaweb.service.TourItineraryService;
 import com.javaweb.repository.entity.ItineraryStatus;
@@ -11,15 +12,17 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class ScheduleAPI {
 
     @Autowired
     private TourItineraryService tourItineraryService;
 
     @GetMapping("/schedule")
-    public List<TourItineraryDTO> getScheduleByTour(@RequestParam(name = "tour") Long tourId) {
-        return tourItineraryService.getItinerariesByTourId(tourId);
+    public ApiResponse<List<TourItineraryDTO> > getScheduleByTour(@RequestParam(name = "tour") Long tourId) {
+        return ApiResponse.<List<TourItineraryDTO>>builder()
+                .result(tourItineraryService.getItinerariesByTourId(tourId))
+                .build();
     }
 
     @PatchMapping("/schedule/{id}")

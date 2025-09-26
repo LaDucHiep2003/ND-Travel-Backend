@@ -33,7 +33,7 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "userid", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "roleid", nullable = false)
     )
-    private List<RoleEntity> roles;
+    private List<RoleEntity> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartEntity> carts = new ArrayList<>();

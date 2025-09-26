@@ -1,4 +1,4 @@
-package com.javaweb.api.admin;
+package com.javaweb.api;
 
 import com.javaweb.model.ApiResponse;
 import com.javaweb.model.PermissionDTO;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class RoleAPI {
     @Autowired
     private RoleService roleService;
@@ -23,15 +23,17 @@ public class RoleAPI {
     private PermissionsService permissionsService;
 
     @GetMapping("/roles")
-    public List<RoleResponse> findAll(@RequestParam Map<String, Object> params){
-        List<RoleResponse> result = roleService.findALL(params);
-        return result;
+    public ApiResponse<List<RoleResponse>> findAll(@RequestParam Map<String, Object> params){
+        return ApiResponse.<List<RoleResponse>>builder()
+                .result(roleService.findALL(params))
+                .build();
     }
 
     @GetMapping("/roles/permissions")
-    public List<PermissionDTO> findAllPermissions(){
-        List<PermissionDTO> result = permissionsService.findAll();
-        return result;
+    public ApiResponse<List<PermissionDTO>> findAllPermissions(){
+        return ApiResponse.<List<PermissionDTO>>builder()
+                .result(permissionsService.findAll())
+                .build();
     }
 
     @GetMapping("/roles/{id}")
@@ -57,8 +59,10 @@ public class RoleAPI {
     }
 
     @DeleteMapping("/roles")
-    public String deleteRole(@RequestParam List<Long> ids){
+    public ApiResponse<String> deleteRole(@RequestParam List<Long> ids){
         roleService.deleteRole(ids);
-        return "Role has been deleted";
+        return ApiResponse.<String>builder()
+                .result("Role has been deleted")
+                .build();
     }
 }

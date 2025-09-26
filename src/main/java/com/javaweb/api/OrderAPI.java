@@ -1,14 +1,11 @@
-package com.javaweb.api.admin;
+package com.javaweb.api;
 
 
-import com.javaweb.model.OrderDTO;
 import com.javaweb.model.ApiResponse;
 import com.javaweb.model.request.OrderRequest;
 import com.javaweb.model.response.OrderResponse;
-import com.javaweb.repository.entity.OrderEntity;
 import com.javaweb.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,20 +13,23 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class OrderAPI {
     @Autowired
     private OrderService orderService;
 
     @GetMapping("orders")
-    public List<OrderResponse> findALl(@RequestParam Map<String, Object> params){
-        List<OrderResponse> result = orderService.findAll(params);
-        return result;
+    public ApiResponse<List<OrderResponse>> findALl(@RequestParam Map<String, Object> params){
+        return ApiResponse.<List<OrderResponse>>builder()
+                .result(orderService.findAll(params))
+                .build();
     }
 
     @GetMapping("orders/{id}")
-    public OrderResponse findById(@PathVariable Long id){
-        return orderService.findById(id);
+    public ApiResponse<OrderResponse> findById(@PathVariable Long id){
+        return ApiResponse.<OrderResponse>builder()
+                .result(orderService.findById(id))
+                .build();
     }
 
     @PostMapping("orders")
@@ -49,14 +49,18 @@ public class OrderAPI {
     }
 
     @DeleteMapping("orders")
-    public String delete(@RequestParam List<Long> ids){
+    public ApiResponse<String> delete(@RequestParam List<Long> ids){
         orderService.delete(ids);
-        return "User has been deleted";
+        return ApiResponse.<String>builder()
+                .result("Order has been deleted")
+                .build();
     }
 
     @PostMapping("orders/confirm")
-    public String confirm(@RequestBody List<Long> ids){
+    public ApiResponse<String> confirm(@RequestBody List<Long> ids){
         orderService.confirm(ids);
-        return "Order has been confirmed";
+        return ApiResponse.<String>builder()
+                .result("Order has been Confirmed")
+                .build();
     }
 }

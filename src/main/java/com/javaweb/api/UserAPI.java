@@ -1,14 +1,13 @@
-package com.javaweb.api.admin;
+package com.javaweb.api;
 
+import com.google.protobuf.Api;
 import com.javaweb.model.TourResponse;
 import com.javaweb.model.ApiResponse;
 import com.javaweb.model.request.UserRequest;
 import com.javaweb.model.response.UserResponse;
 import com.javaweb.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,13 +21,17 @@ public class UserAPI {
     private UserService userService;
 
     @GetMapping("/users")
-    public List<UserResponse> findAll(@RequestParam Map<String, Object> params) {
-        return userService.findAll(params);
+    public ApiResponse<List<UserResponse>> findAll(@RequestParam Map<String, Object> params) {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.findAll(params))
+                .build();
     }
 
     @GetMapping("/users/{id}")
-    public UserResponse findById(@PathVariable Long id) {
-        return userService.findById(id);
+    public ApiResponse<UserResponse> findById(@PathVariable Long id) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.findById(id))
+                .build();
     }
 
     @PostMapping("/users")
@@ -47,8 +50,10 @@ public class UserAPI {
         return apiResponse;
     }
     @DeleteMapping("/users")
-    public ResponseEntity<TourResponse> deleteUser(@RequestParam List<Long> ids) {
-        TourResponse msg = userService.deleteUser(ids);
-        return ResponseEntity.ok(msg);
+    public ApiResponse<String> deleteUser(@RequestParam List<Long> ids) {
+        userService.deleteUser(ids);
+        return ApiResponse.<String>builder()
+                .result("User has been deleted")
+                .build();
     }
 } 
