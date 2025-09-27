@@ -13,6 +13,7 @@ import com.javaweb.repository.entity.TourEntity;
 import com.javaweb.service.TourService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ public class TourServiceImpl implements TourService {
     private ModelMapper modelMapper;
 
     @Override
+    @PreAuthorize("hasRole('Admin')")
     public List<TourResponse> findAll(Map<String, Object> params) {
         TourSearchBuilder tourSearchBuilders = tourSearchBuilderConverter.toTourSearchBuilder(params);
         List<TourEntity> tourEntities = tourRepository.findAll(tourSearchBuilders);
@@ -68,6 +70,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
+    @PreAuthorize("hasRole('Admin')")
     public TourResponse createTour(TourRequest tourDTO) {
         TourEntity tourEntity = new TourEntity();
         modelMapper.map(tourDTO, tourEntity);
@@ -78,6 +81,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
+    @PreAuthorize("hasRole('Admin')")
     public TourResponse editTour(TourRequest tourDTO) {
         TourEntity tourEntity = tourRepository.findById(tourDTO.getId()).get();
         modelMapper.map(tourDTO, tourEntity);
@@ -94,6 +98,7 @@ public class TourServiceImpl implements TourService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('Admin')")
     public void deleteTour(List<Long> ids) {
         tourRepository.deleteTour(ids);
     }
