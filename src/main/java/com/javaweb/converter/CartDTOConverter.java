@@ -1,6 +1,5 @@
 package com.javaweb.converter;
 
-import com.javaweb.model.CartDTO;
 import com.javaweb.model.response.CartResponse;
 import com.javaweb.repository.entity.CartEntity;
 import org.modelmapper.ModelMapper;

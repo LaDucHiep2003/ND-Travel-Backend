@@ -1,6 +1,5 @@
 package com.javaweb.converter;
 
-import com.javaweb.model.TourDTO;
 import com.javaweb.model.response.TourResponse;
 import com.javaweb.repository.entity.TourEntity;
 import org.modelmapper.ModelMapper;

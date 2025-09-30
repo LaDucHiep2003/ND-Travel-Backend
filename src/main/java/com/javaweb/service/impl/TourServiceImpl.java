@@ -3,7 +3,6 @@ package com.javaweb.service.impl;
 import com.javaweb.builder.TourSearchBuilder;
 import com.javaweb.converter.TourDTOConverter;
 import com.javaweb.converter.TourSearchBuilderConverter;
-import com.javaweb.model.TourDTO;
 import com.javaweb.model.request.TourRequest;
 import com.javaweb.model.response.TourResponse;
 import com.javaweb.repository.TourCategoryRepository;
@@ -61,10 +60,6 @@ public class TourServiceImpl implements TourService {
     public TourResponse findById(Long id) {
         TourEntity tourEntity = tourRepository.findById(id).get();
         TourResponse tourDTO = tourDTOConverter.toTourDTO(tourEntity);
-//        List<Long> categoryIds = tourEntity.getTourCategories().stream()
-//                .map(TourCategoryEntity::getId)
-//                .collect(Collectors.toList());
-//        tourDTO.setCategory_id(categoryIds);
         return tourDTO;
     }
 
@@ -73,7 +68,7 @@ public class TourServiceImpl implements TourService {
     public TourResponse createTour(TourRequest tourDTO) {
         TourEntity tourEntity = new TourEntity();
         modelMapper.map(tourDTO, tourEntity);
-        List<TourCategoryEntity> tourCategories = tourCategoryRepository.findAllById(tourDTO.getCategory_id());
+        var tourCategories = tourCategoryRepository.findAllById(tourDTO.getCategory_id());
         tourEntity.setTourCategories(tourCategories);
         TourEntity result = tourRepository.save(tourEntity);
         return tourDTOConverter.toTourDTO(result);

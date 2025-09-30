@@ -1,6 +1,5 @@
 package com.javaweb.service;
 
-import com.javaweb.model.TourDTO;
 import com.javaweb.model.request.TourRequest;
 import com.javaweb.model.response.TourResponse;
 

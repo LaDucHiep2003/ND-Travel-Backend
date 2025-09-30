@@ -11,6 +11,7 @@ import java.util.Map;
 public interface UserService {
     List<UserResponse> findAll(Map<String, Object> params);
     UserResponse findById(Long id);
+    UserResponse getMyInfo();
     UserResponse createUser(UserRequest userRequest);
     UserResponse updateUser(UserRequest userRequest);
     void deleteUser(List<Long> ids);

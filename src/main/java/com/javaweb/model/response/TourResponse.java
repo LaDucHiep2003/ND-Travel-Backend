@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,4 +31,5 @@ public class TourResponse {
      LocalDate departure_date;
      LocalDate end_date;
      Double discount;
+     List<TourCategoryResponse> categories;
 }

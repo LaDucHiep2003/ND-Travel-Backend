@@ -15,26 +15,33 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserAPI {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("")
     public ApiResponse<List<UserResponse>> findAll(@RequestParam Map<String, Object> params) {
         return ApiResponse.<List<UserResponse>>builder()
                 .result(userService.findAll(params))
                 .build();
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ApiResponse<UserResponse> findById(@PathVariable Long id) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.findById(id))
                 .build();
     }
 
-    @PostMapping("/users")
+    @GetMapping("/myInfo")
+    public ApiResponse<UserResponse> myInfo(){
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .build();
+    }
+
+    @PostMapping("")
     public ApiResponse<UserResponse> createUser(@RequestBody UserRequest userRequest) {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
         UserResponse result = userService.createUser(userRequest);
@@ -42,14 +49,14 @@ public class UserAPI {
         return apiResponse;
     }
 
-    @PutMapping("/users")
+    @PutMapping("")
     public ApiResponse<UserResponse> updateUser(@RequestBody UserRequest userRequest) {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
         UserResponse result = userService.updateUser(userRequest);
         apiResponse.setResult(result);
         return apiResponse;
     }
-    @DeleteMapping("/users")
+    @DeleteMapping("")
     public ApiResponse<String> deleteUser(@RequestParam List<Long> ids) {
         userService.deleteUser(ids);
         return ApiResponse.<String>builder()

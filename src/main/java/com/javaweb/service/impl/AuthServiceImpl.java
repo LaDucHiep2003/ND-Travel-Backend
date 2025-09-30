@@ -41,10 +41,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        var user = userRepository.findByUsername(authenticationRequest.getUsername());
-        if(user == null) {
-            throw new AppException(ErrorCode.USER_NOT_FOUND);
-        }
+        var user = userRepository.findByUsername(authenticationRequest.getUsername())
+                .orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND));
 
         boolean authenticated = passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword());
         if(!authenticated){

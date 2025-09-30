@@ -2,7 +2,6 @@ package com.javaweb.api;
 
 
 import com.javaweb.model.ApiResponse;
-import com.javaweb.model.CartDTO;
 import com.javaweb.model.response.CartResponse;
 import com.javaweb.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
