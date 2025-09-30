@@ -5,7 +5,6 @@ import com.javaweb.converter.UserSearchBuilderConverter;
 import com.javaweb.exception.AppException;
 import com.javaweb.exception.ErrorCode;
 import com.javaweb.converter.UserDTOConverter;
-import com.javaweb.model.RoleDTO;
 import com.javaweb.model.request.UserRequest;
 import com.javaweb.model.response.UserResponse;
 import com.javaweb.repository.UserRepository;
@@ -14,6 +13,7 @@ import com.javaweb.repository.RoleRepository;
 import com.javaweb.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -50,19 +49,14 @@ public class UserServiceImpl implements UserService {
         List<UserResponse> result = new ArrayList<>();
         for (UserEntity userEntity : userEntities) {
             UserResponse userDTO = modelMapper.map(userEntity, UserResponse.class);
-            // Chuyển roles sang RoleDTO
-            if (userEntity.getRoles() != null) {
-                List<RoleDTO> roles = userEntity.getRoles().stream()
-                        .map(role -> modelMapper.map(role, RoleDTO.class))
-                        .collect(Collectors.toList());
-                userDTO.setRoles(roles);
-            }
             result.add(userDTO);
         }
         return result;
     }
 
     @Override
+    @PreAuthorize("hasRole('Admin')")
+//    @PreAuthorize("hasAuthority('create_user')")
     public UserResponse findById(Long id) {
         UserEntity userEntity = userRepository.findById(id).get();
         UserResponse result = userDTOConverter.toUserDTO(userEntity);
@@ -70,6 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('Admin')")
     public UserResponse createUser(UserRequest userRequest) {
         if(userRepository.existsByUsername(userRequest.getUsername()))
             throw new AppException(ErrorCode.USER_EXISTED);
@@ -84,6 +79,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('Admin')")
     public UserResponse updateUser(UserRequest userRequest) {
         UserEntity userEntity = userRepository.findById(userRequest.getId()).get();
         // Cập nhật các trường
@@ -107,6 +103,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('Admin')")
     public void deleteUser(List<Long> ids) {
         userRepository.deleteUser(ids);
     }

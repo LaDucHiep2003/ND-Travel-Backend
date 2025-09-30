@@ -34,7 +34,7 @@ public class RoleEntity {
         joinColumns = @JoinColumn(name = "role_id"),
         inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
-    private List<PermissionEntity> permissions = new ArrayList<>();
+    private List<PermissionEntity> permissions;
 
     public Long getId() {
         return id;

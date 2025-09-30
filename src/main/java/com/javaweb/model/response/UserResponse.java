@@ -15,5 +15,5 @@ public class UserResponse {
     String username;
     String email;
     String fullname;
-    List<RoleDTO> roles;
+    List<RoleResponse> roles;
 }
