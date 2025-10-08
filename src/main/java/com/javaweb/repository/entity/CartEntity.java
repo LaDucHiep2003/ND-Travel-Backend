@@ -27,7 +27,7 @@ public class CartEntity {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItemEntity> items = new ArrayList<>();
+    private List<CartItemEntity> items;
 
 
     // Getters & Setters
@@ -70,4 +70,5 @@ public class CartEntity {
     public void setItems(List<CartItemEntity> items) {
         this.items = items;
     }
+
 }

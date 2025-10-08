@@ -19,19 +19,7 @@ public class RoleDTOConverter {
     private ModelMapper modelMapper;
 
     public RoleResponse toRoleDTO(RoleEntity item){
-        RoleResponse dto = modelMapper.map(item, RoleResponse.class);
-
-        // Map permissions thủ công
-        if (item.getPermissions() != null) {
-            List<PermissionResponse> permissionResponses = item.getPermissions()
-                    .stream()
-                    .map(permission -> modelMapper.map(permission, PermissionResponse.class))
-                    .collect(Collectors.toList());
-
-            dto.setPermissions(permissionResponses);
-        }
-
-        return dto;
+        return modelMapper.map(item, RoleResponse.class);
     }
 
     public RoleEntity toRoleEntity(RoleRequest item){

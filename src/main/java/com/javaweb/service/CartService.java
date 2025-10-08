@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface CartService {
     List<CartResponse> getAll();
+    CartResponse myCart();
 }

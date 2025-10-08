@@ -12,6 +12,7 @@ public enum ErrorCode {
     UNAUTHENTICATED(501, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     ROLE_EXISTED(500, "Role already existed", HttpStatus.NOT_FOUND),
     UNAUTHORIZED(500, "You do not permission", HttpStatus.FORBIDDEN),
+    INVALID_PASSWORD(500, "Invalid Password", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

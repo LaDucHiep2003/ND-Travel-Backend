@@ -12,10 +12,9 @@ import java.math.BigDecimal;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartItemsResponse {
      Long id;
-     Long tourId;
-     String tourName;
+     Long cart_id;
+     Long tour_id;
+     String type;
      Integer quantity;
-     BigDecimal unitPrice;
-     BigDecimal subtotal;
-     String thumbnail;
+     Integer price;
 }

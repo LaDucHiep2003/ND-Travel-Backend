@@ -1,5 +1,6 @@
 package com.javaweb.repository.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -13,10 +14,12 @@ public class CartItemEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cart_id", nullable = false)
+    @JsonIgnore
     private CartEntity cart;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "tour_id", nullable = false)
+    @JsonIgnore
     private TourEntity tour;
 
     @Enumerated(EnumType.STRING)

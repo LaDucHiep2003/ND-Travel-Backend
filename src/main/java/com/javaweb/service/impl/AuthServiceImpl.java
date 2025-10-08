@@ -7,6 +7,7 @@ import com.javaweb.model.request.IntrospectRequest;
 import com.javaweb.model.response.AuthenticationResponse;
 import com.javaweb.model.response.IntrospectResponse;
 import com.javaweb.repository.UserRepository;
+import com.javaweb.repository.entity.RoleEntity;
 import com.javaweb.repository.entity.UserEntity;
 import com.javaweb.service.AuthService;
 import com.nimbusds.jose.*;
@@ -26,6 +27,7 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 import java.util.StringJoiner;
 
 
@@ -49,8 +51,9 @@ public class AuthServiceImpl implements AuthService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         var token = generateToken(user);
+        List<String> roles = user.getRoles().stream().map(RoleEntity::getCode).toList();
 
-        return AuthenticationResponse.builder().token(token).authenticated(true).build();
+        return AuthenticationResponse.builder().token(token).roles(roles).authenticated(true).build();
     }
 
     private String generateToken(UserEntity user) {

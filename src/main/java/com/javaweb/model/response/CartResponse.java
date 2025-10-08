@@ -13,8 +13,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartResponse {
      Long id;
-     LocalDateTime createdAt;
-     LocalDateTime updatedAt;
+//     List<CartItemsResponse> items;
      UserResponse user;
-     List<CartItemsResponse> items;
 }
